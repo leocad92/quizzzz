@@ -291,15 +291,27 @@
       renderQuestion();
     };
 
-    $("btnShowLeaderboard").onclick = () => {
+    $("btnShowLeaderboard").onclick = async () => {
       $("screen-start").classList.add("hidden");
       $("screen-end").classList.remove("hidden");
       document.querySelector(".final-score-container").classList.add("hidden");
       $("btnRestart").textContent = "Retour au menu";
       
-      // Données exemple pour l'accueil[cite: 1]
-      const mockData = [{name: "Léo", score: 100}, {name: "Thomas", score: 80}];
-      renderLeaderboard(mockData, false);
+      // On affiche un message de chargement
+      $("leaderboard").innerHTML = "<li style='text-align:center'>Chargement des champions...</li>";
+
+      try {
+        // On appelle ton lien Google Script pour RÉCUPÉRER les scores
+        const response = await fetch(GOOGLE_SCRIPT_URL);
+        const realScores = await response.json();
+        
+        // On affiche les vrais scores (mais masqués car on est à l'accueil)
+        renderLeaderboard(realScores, false);
+      } catch (error) {
+        console.error("Erreur de récupération :", error);
+        $("leaderboard").innerHTML = "<li>Impossible de charger le classement 😢</li>";
+      }
+    };
     };
 
     $("btnRight").onclick = () => {
