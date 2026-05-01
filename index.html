@@ -159,10 +159,6 @@
 
       <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
       <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
-
-      <button id="btnShowLeaderboard" class="btn" style="background:transparent; color:var(--muted); width:100%; margin-top:10px; font-size:14px; text-decoration: underline;">
-        Voir le classement
-      </button>
     </section>
 
     <section class="card hidden" id="screen-quiz">
@@ -192,13 +188,10 @@
         <h3 style="text-align:center; text-transform:uppercase; font-size:14px; letter-spacing:2px">CLASSEMENT</h3>
         <ol id="leaderboard" class="leaderboard"></ol>
       </div>
-
-      <button id="btnRestart" class="btn primary" style="width:100%">Rejouer</button>
     </section>
   </main>
 
   <script>
-    // COLLE TON URL ICI[cite: 1]
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGBrUA4gstDJzYedmpjHgVF5EY3cHhJFi9xOda_us8a5C5MlRgGS_N6RY-xrZL-idX4w/exec";
 
     const BLOCKS = [
@@ -244,33 +237,25 @@
       $("finalScore").textContent = score;
       $("scoreMessage").textContent = score > 80 ? "BIG LEAGUES 🏆" : score > 40 ? "Pas mal 👍" : "NABILLA TIER 📞";
       
-      // Envoyer le score[cite: 1]
       try {
+        // Envoi du score à Google Sheets
         await fetch(`${GOOGLE_SCRIPT_URL}?name=${encodeURIComponent(playerName)}&score=${score}`, { mode: 'no-cors' });
       } catch(e) { console.log("Erreur envoi"); }
       
-      // Rafraîchir le classement[cite: 1]
+      // Chargement du classement mis à jour
       loadLiveLeaderboard(true);
     }
 
     async function loadLiveLeaderboard(showPoints) {
       $("leaderboard").innerHTML = "<li style='text-align:center'>Chargement...</li>";
       try {
-        const res = await fetch(GOOGLE_SCRIPT_URL);
+        const res = await fetch(GOOGLE_SCRIPT_URL + "?t=" + new Date().getTime());
         const data = await res.json();
         renderLeaderboard(data, showPoints);
       } catch(e) {
         renderLeaderboard([], showPoints);
       }
     }
-
-    $("btnShowLeaderboard").onclick = () => {
-      $("screen-start").classList.add("hidden");
-      $("screen-end").classList.remove("hidden");
-      document.querySelector(".final-score-container").classList.add("hidden");
-      $("btnRestart").textContent = "Retour au menu";
-      loadLiveLeaderboard(false);
-    };
 
     $("btnStart").onclick = () => {
       playerName = $("nameInput").value || "Anonyme";
@@ -305,7 +290,6 @@
       $("progress").textContent = `Etape ${blockIndex + 1}/${BLOCKS.length}`;
       $("score").textContent = `Score: ${score}`;
     }
-
   </script>
 </body>
 </html>
