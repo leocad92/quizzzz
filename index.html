@@ -135,11 +135,7 @@
       padding: 16px;
       margin-bottom: 10px;
     }
-    .rank-1 { border-color: #fbbf24 !important; background: rgba(251, 191, 36, 0.05) !important; }
     
-    .lbRow { display: flex; justify-content: space-between; font-weight: 700; }
-    .lbDate { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
     .pill {
       background: rgba(255,255,255,0.1);
       padding: 6px 12px;
@@ -153,31 +149,29 @@
   <main class="app">
     <div class="brand">QuizZ Culture G (version Léo)</div>
 
-<!-- Écran de Départ -->
-<section class="card" id="screen-start" style="text-align: center;">
-  <div style="margin-bottom: 30px;">
-    <!-- "Règles :" seul sur sa ligne, centré et ultra gras -->
-    <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 15px;">Règles :</h2>
-    
-    <!-- Chaque phrase sur sa ligne, centrée -->
-    <p style="margin: 5px 0; font-weight: 500;">Il y a 20 blocs</p>
-    <p style="margin: 5px 0; font-weight: 500;">Si c’est bon, tu débloques la sous-question suivante (tiroir)</p>
-    <p style="margin: 5px 0; font-weight: 500;">Si c’est faux, on passe au bloc suivant</p>
-    <p style="margin: 15px 0; font-weight: 500;">Il y a aussi des questions à choix multiples</p>
-    
-    <!-- "Prêt ?" en ultra gras -->
-    <h3 style="font-weight: 900; font-size: 24px; margin-top: 20px;">Prêt ?</h3>
-  </div>
+    <!-- Écran de Départ -->
+    <section class="card" id="screen-start" style="text-align: center;">
+      <div style="margin-bottom: 30px;">
+        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 15px;">Règles :</h2>
+        
+        <p style="margin: 5px 0; font-weight: 500;">Il y a 20 blocs</p>
+        <p style="margin: 5px 0; font-weight: 500;">Si c’est bon, tu débloques la sous-question suivante (tiroir)</p>
+        <p style="margin: 5px 0; font-weight: 500;">Si c’est faux, on passe au bloc suivant</p>
+        <p style="margin: 15px 0; font-weight: 500;">Il y a aussi des questions à choix multiples</p>
+        
+        <!-- Changement : font-weight 700 au lieu de 900 -->
+        <h3 style="font-weight: 700; font-size: 24px; margin-top: 20px;">Prêt ?</h3>
+      </div>
 
-  <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
-  <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
+      <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
+      <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
 
-<!-- Nouveau bouton pour voir le classement -->
-<button id="btnShowLeaderboard" class="btn" style="background:transparent; color:var(--muted); width:100%; margin-top:10px; font-size:14px; text-decoration: underline;">
-  Voir le classement
-</button>
-</section>
+      <button id="btnShowLeaderboard" class="btn" style="background:transparent; color:var(--muted); width:100%; margin-top:10px; font-size:14px; text-decoration: underline;">
+        Voir le classement
+      </button>
+    </section>
 
+    <!-- Écran Quiz -->
     <section class="card hidden" id="screen-quiz">
       <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
         <span id="progress" class="pill"></span>
@@ -199,7 +193,7 @@
       <div class="final-score-container">
         <span class="big-score-label">Ton Score Final</span>
         <div class="big-score-value" id="finalScore">0</div>
-        <span id="scoreMessage">Excellent !</span>
+        <span id="scoreMessage"></span>
       </div>
       
       <div style="margin: 30px 0;">
@@ -217,7 +211,7 @@
         { level: 0, label: "1)", points: 1, text: "Comment s'appelle la plus grand Pyramide d'Egypte ?" },
         { level: 1, label: "a)", points: 3, text: "À cinq cents ans près, en quelle année fut elle construite ?" },
         { level: 2, label: "i.", points: 4, text: "Quelles sont les 6 autres merveilles antiques ?" },
-        { level: 3, label: "–", points: 5, text: "Quel pharaon a construit la seconde plus grande pyramide d'Egypte ? (Indice : c'est aussi le nom de la Pyramide)" },
+        { level: 3, label: "–", points: 5, text: "Quel pharaon a construit la seconde plus grande pyramide d'Egypte ?" },
       ]},
       { id: 2, items: [
         { level: 0, label: "2)", points: 2, text: "Comment s'appelle le personnage principal de la série Breaking Bad ?" },
@@ -236,40 +230,45 @@
       $("questionText").textContent = item.text;
       $("questionPoints").textContent = `+ ${item.points} points`;
       $("kicker").textContent = `Bloc ${blockIndex + 1} • Question ${item.label}`;
-      $("progress").textContent = `Etape ${blockIndex + 1}/30`;
+      $("progress").textContent = `Etape ${blockIndex + 1}/${BLOCKS.length}`;
       $("score").textContent = `Score: ${score}`;
       $("btnUndo").style.opacity = history.length ? "1" : "0";
     }
 
-    function finishQuiz() {
-      $("finalScore").textContent = score;
-$("scoreMessage").textContent = 
-    score > 80 ? "BIG LEAGUES 🏆" : 
-    score > 60 ? "Pas mal !! 🔥" : 
-    score > 40 ? "Pas mal 👍" : 
-    score > 20 ? "Peut mieux faire ! 🤨" : 
-    "NABILLA TIER 📞";
-      $("screen-quiz").classList.add("hidden");
-      $("screen-end").classList.remove("hidden");
-      
-      renderLeaderboard([{name: playerName, score: score, date: new Date()}]);
-    }
-
-    function renderLeaderboard(entries) {
+    function renderLeaderboard(entries, showPoints = true) {
       const list = $("leaderboard");
       list.innerHTML = "";
-      entries.forEach((e, i) => {
+      entries.forEach((e) => {
         const li = document.createElement("li");
-        if(i === 0) li.className = "rank-1";
+        // Modification : Affiche les points seulement si showPoints est vrai
+        const scoreDisplay = showPoints ? `${e.score} pts` : "Terminé";
         li.innerHTML = `
-          <div class="lbRow"><span>🥇 ${e.name}</span><span>${e.score} pts</span></div>
-          <div class="lbDate">Le ${new Date(e.date).toLocaleDateString()}</div>
+          <div style="display:flex; justify-content:space-between; font-weight:700;">
+            <span>👤 ${e.name}</span>
+            <span>${scoreDisplay}</span>
+          </div>
         `;
         list.appendChild(li);
       });
     }
 
-    // Events
+    function finishQuiz() {
+      document.querySelector(".final-score-container").classList.remove("hidden");
+      $("finalScore").textContent = score;
+      $("scoreMessage").textContent = 
+          score > 80 ? "BIG LEAGUES 🏆" : 
+          score > 60 ? "Pas mal !! 🔥" : 
+          score > 40 ? "Pas mal 👍" : 
+          score > 20 ? "Peut mieux faire ! 🤨" : 
+          "NABILLA TIER 📞";
+      
+      $("screen-quiz").classList.add("hidden");
+      $("screen-end").classList.remove("hidden");
+      
+      // Ici showPoints est activé
+      renderLeaderboard([{name: playerName, score: score}], true);
+    }
+
     $("btnStart").onclick = () => {
       playerName = $("nameInput").value || "Anonyme";
       $("screen-start").classList.add("hidden");
@@ -277,14 +276,14 @@ $("scoreMessage").textContent =
       renderQuestion();
     };
 
-    // Affiche le classement depuis l'accueil
     $("btnShowLeaderboard").onclick = () => {
       $("screen-start").classList.add("hidden");
       $("screen-end").classList.remove("hidden");
-      // On cache la zone du score car le quiz n'est pas fini
       document.querySelector(".final-score-container").classList.add("hidden");
-      // Le bouton rejouer devient un bouton retour
       $("btnRestart").textContent = "Retour au menu";
+      
+      // Modification : showPoints est faux quand on vient de l'accueil
+      renderLeaderboard([{name: "Léo", score: 0}, {name: "Ami", score: 0}], false);
     };
 
     $("btnRight").onclick = () => {
@@ -309,41 +308,6 @@ $("scoreMessage").textContent =
     };
 
     $("btnRestart").onclick = () => location.reload();
-
-    function finishQuiz() {
-      // On réaffiche le conteneur du score (au cas où il était caché via l'accueil)
-      document.querySelector(".final-score-container").classList.remove("hidden");
-      $("finalScore").textContent = score;
-      
-      // Tes messages personnalisés
-      $("scoreMessage").textContent = 
-          score > 80 ? "BIG LEAGUES 🏆" : 
-          score > 60 ? "Pas mal !! 🔥" : 
-          score > 40 ? "Pas mal 👍" : 
-          score > 20 ? "Peut mieux faire ! 🤨" : 
-          "NABILLA TIER 📞";
-      
-      $("screen-quiz").classList.add("hidden");
-      $("screen-end").classList.remove("hidden");
-      
-      // Envoi ou affichage du classement
-      renderLeaderboard([{name: playerName, score: score, date: new Date()}]);
-    }
-
-    function renderLeaderboard(entries) {
-      const list = $("leaderboard");
-      list.innerHTML = "";
-      entries.forEach((e) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <div style="display:flex; justify-content:space-between; font-weight:700;">
-            <span>👤 ${e.name}</span>
-            <span>${e.score} pts</span>
-          </div>
-        `;
-        list.appendChild(li);
-      });
-    }
   </script>
 </body>
 </html>
