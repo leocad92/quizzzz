@@ -3,200 +3,212 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quiz à tiroirs</title>
+  <title>Quizz culture G (version Léo)</title>
+  <!-- Import de la police Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0b0d12;
-      --card:#111522;
-      --text:#f4f6ff;
-      --muted:#a9b0c7;
-      --line:rgba(255,255,255,.08);
-      --primary:#4e8cff;
-      --success:#35d07f;
-      --danger:#ff4d6d;
-      --ghost:rgba(255,255,255,.08);
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
-      --radius:20px;
+    :root {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #343a40;
+      --muted: #6c757d;
+      --line: #dee2e6;
+      --primary: #4582EC;
+      --primary-dark: #2c6fdf;
+      --success: #02B875;
+      --success-dark: #019e64;
+      --danger: #E63757;
+      --danger-dark: #d01f42;
+      --ghost: #f1f3f5;
+      --shadow: 0 2px 12px rgba(0,0,0,.08);
+      --radius: 16px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1200px 900px at 30% 0%, rgba(78,140,255,.18), transparent 55%),
-                  radial-gradient(900px 700px at 100% 20%, rgba(53,208,127,.12), transparent 55%),
-                  var(--bg);
-      color:var(--text);
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.5;
     }
-    .app{
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-      padding:16px;
-      gap:14px;
-      max-width:720px;
-      margin:0 auto;
+
+    .app {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 14px;
+      max-width: 720px;
+      margin: 0 auto;
     }
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:8px 2px;
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 2px;
+      border-bottom: 2px solid var(--line);
+      margin-bottom: 4px;
     }
-    .brand{font-weight:800; letter-spacing:.2px; font-size:18px;}
-    .meta{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
-    .pill{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      padding:8px 10px;
-      border-radius:999px;
-      font-size:13px;
-      color:var(--muted);
+
+    .brand {
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--primary);
+      letter-spacing: -.3px;
     }
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:18px;
-      box-shadow:var(--shadow);
+
+    .meta { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
     }
-    .hidden{display:none !important;}
-    h1{margin:0 0 8px; font-size:22px}
-    h2{margin:6px 0 8px; font-size:22px; line-height:1.25}
-    h3{margin:0 0 6px; font-size:16px}
-    .muted{color:var(--muted)}
-    .small{font-size:12px}
-    .big{font-size:18px}
-    .label{display:block; margin:14px 0 6px; color:var(--muted); font-size:13px}
-    .input{
-      width:100%;
-      padding:14px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.25);
-      color:var(--text);
-      font-size:16px;
-      outline:none;
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
     }
-    .input:focus{border-color:rgba(78,140,255,.6); box-shadow:0 0 0 4px rgba(78,140,255,.18)}
-    .row{display:flex; gap:10px; margin-top:14px; align-items:center}
-    .space-between{justify-content:space-between}
-    .btn{
-      -webkit-tap-highlight-color: transparent;
-      appearance:none;
-      border:none;
-      border-radius:16px;
-      padding:14px;
-      font-weight:700;
-      font-size:15px;
-      color:var(--text);
-      background:var(--ghost);
-      cursor:pointer;
-      flex:1;
+
+    .hidden { display: none !important; }
+
+    h1 { margin: 0 0 8px; font-size: 24px; font-weight: 800; color: var(--text); }
+    h2 { margin: 8px 0 10px; font-size: 22px; font-weight: 700; line-height: 1.3; color: var(--text); }
+    h3 { margin: 0 0 8px; font-size: 17px; font-weight: 700; }
+
+    .muted { color: var(--muted); }
+    .small { font-size: 13px; }
+    .big { font-size: 18px; font-weight: 600; }
+    
+    #scoreMessage {
+      display: block;
+      margin-bottom: 15px;
+      font-weight: 800;
+      color: var(--primary);
+      font-size: 20px;
     }
-    .btn:active{transform:translateY(1px)}
-    .btn.primary{background:linear-gradient(180deg, rgba(78,140,255,1), rgba(78,140,255,.78))}
-    .btn.success{background:linear-gradient(180deg, rgba(53,208,127,1), rgba(53,208,127,.78))}
-    .btn.danger{background:linear-gradient(180deg, rgba(255,77,109,1), rgba(255,77,109,.78))}
-    .btn.ghost{background:rgba(255,255,255,.06); border:1px solid var(--line)}
-    .btn[disabled]{opacity:.5; cursor:not-allowed}
-    .controls{display:flex; gap:10px; margin-top:14px;}
-    .kicker{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      color:var(--muted);
-      font-size:13px;
-      width:fit-content;
+
+    .label { display: block; margin: 16px 0 6px; color: var(--muted); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+
+    .input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
     }
-    .sub{color:var(--muted); font-size:13px}
-    .error{color:#ffb4c1; margin:10px 0 0}
-    .divider{height:1px; background:var(--line); margin:14px 0}
-    .details summary{cursor:pointer; color:var(--muted)}
-    .details ul{margin:8px 0 0; padding-left:18px; color:var(--muted)}
-    .leaderboard{margin:10px 0 0; padding-left:22px}
-    .leaderboard li{
-      padding:10px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      margin:10px 0;
-      background:rgba(255,255,255,.04);
+
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 16px;
+      font-weight: 700;
+      font-size: 15px;
+      font-family: inherit;
+      cursor: pointer;
+      flex: 1;
+      transition: transform .1s, filter .15s;
     }
-    .lbRow{display:flex; justify-content:space-between; gap:10px; align-items:center}
-    .lbName{font-weight:800}
-    .lbScore{color:var(--muted); font-weight:800}
-    .footer{padding:6px 2px; text-align:center; margin-top:auto}
-    @media (min-width: 560px){
-      .app{padding:22px}
-      .card{padding:22px}
-      h2{font-size:26px}
+    .btn:active { transform: translateY(1px); filter: brightness(.95); }
+    .btn.primary { background: var(--primary); color: #fff; }
+    .btn.success { background: var(--success); color: #fff; }
+    .btn.danger { background: var(--danger); color: #fff; }
+    .btn.ghost { background: var(--ghost); color: var(--muted); border: 1.5px solid var(--line); }
+
+    .leaderboard { margin: 10px 0 0; padding-left: 0; list-style: none; }
+    .leaderboard li {
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      margin: 8px 0;
+      background: #fff;
     }
+    
+    /* Styles pour les médailles */
+    .rank-1 { border-color: #ffc107 !important; background: #fffdf0 !important; }
+    .rank-2 { border-color: #adb5bd !important; background: #f8f9fa !important; }
+    .rank-3 { border-color: #cd7f32 !important; background: #fdf6f0 !important; }
+
+    .lbRow { display: flex; justify-content: space-between; align-items: center; }
+    .lbName { font-weight: 700; color: var(--text); }
+    .lbScore { color: var(--primary); font-weight: 800; }
+    .lbDate { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+
+    .footer { padding: 8px 2px; text-align: center; margin-top: auto; }
   </style>
 </head>
 <body>
   <main class="app" id="app">
     <header class="topbar">
-      <div class="brand">Quiz Géant v1</div>
+      <div class="brand">Quizz culture G (version Léo)</div>
       <div class="meta">
-        <div id="progress" class="pill" aria-live="polite"></div>
-        <div id="score" class="pill" aria-live="polite"></div>
+        <div id="progress" class="pill"></div>
+        <div id="score" class="pill"></div>
       </div>
     </header>
+
     <section class="card" id="screen-start">
-      <h1>Avant de commencer</h1>
-      <p class="muted">Entre ton prénom, puis appuie sur <b>Commencer</b>.</p>
-      <label class="label" for="nameInput">Prénom</label>
-      <input id="nameInput" class="input" inputmode="text" autocomplete="given-name" placeholder="Ex : Jules" maxlength="24" />
+      <h1>C'est parti !</h1>
+      <p class="muted">Entre ton prénom pour commencer le quiz.</p>
+      <label class="label">Prénom</label>
+      <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="24" />
       <div class="row">
         <button id="btnStart" class="btn primary">Commencer</button>
       </div>
-      <p id="startError" class="error" role="alert" aria-live="polite"></p>
-      <details class="details">
-        <summary>Règles</summary>
-        <ul>
-          <li>Tu vois une question à la fois.</li>
-          <li>Si c'est <b>bon</b>, tu débloques la sous-question suivante (tiroir).</li>
-          <li>Si c'est <b>faux</b>, on passe au bloc suivant.</li>
-        </ul>
-      </details>
+      <p id="startError" class="error"></p>
     </section>
-    <section class="card hidden" id="screen-quiz" aria-live="polite">
+
+    <section class="card hidden" id="screen-quiz">
       <div class="kicker" id="kicker"></div>
       <h2 id="questionText"></h2>
       <div class="sub" id="questionPoints"></div>
-      <div class="controls">
-        <button id="btnWrong" class="btn danger">Mauvaise réponse</button>
-        <button id="btnRight" class="btn success">Bonne réponse</button>
+      <div class="controls" style="display:flex; gap:10px; margin-top:20px;">
+        <button id="btnWrong" class="btn danger">Mauvais</button>
+        <button id="btnRight" class="btn success">Bon</button>
       </div>
-      <div class="row space-between">
+      <div class="row" style="margin-top:20px;">
         <button id="btnUndo" class="btn ghost">Annuler</button>
-        <button id="btnQuit" class="btn ghost">Quitter</button>
       </div>
-      <p class="muted small">Astuce : tu peux utiliser <b>Annuler</b> si tu as cliqué trop vite.</p>
     </section>
+
     <section class="card hidden" id="screen-end">
-      <h1>Terminé 🎉</h1>
-      <p class="big">Score : <span id="finalScore"></span></p>
-      <div class="divider"></div>
-      <h3>Classement</h3>
-      <p class="muted small" id="leaderboardStatus"></p>
+      <h1>Terminé ! 🎉</h1>
+      <div id="scoreMessage"></div>
+      <p class="big">Ton score : <span id="finalScore"></span></p>
+      <div class="divider" style="height:1px; background:var(--line); margin:20px 0;"></div>
+      <h3>Classement des amis</h3>
       <ol id="leaderboard" class="leaderboard"></ol>
       <div class="row">
         <button id="btnRestart" class="btn primary">Rejouer</button>
       </div>
-      <p class="muted small">Le classement est partagé entre tous les joueurs.</p>
     </section>
+
     <footer class="footer muted small">
-      <span>Mobile-first · GitHub Pages + Google Apps Script</span>
+      <span>Quizz Culture G (Version Léo)</span>
     </footer>
   </main>
 
   <script>
-const API_BASE = "https://script.google.com/macros/s/AKfycbzL1r4zdq2CxWbvPEKiM_nBLa1Yid0KCvB9eySrXGzoqaC4nanwL2rM3ZwUVMETIyA2ng/exec";
+const API_BASE = "COLLE_TON_URL_ICI";
 
 const BLOCKS = [
   { id: 1, items: [
@@ -314,7 +326,7 @@ const BLOCKS = [
     { level: 3, label: "–", points: 4, text: "En quelle année Fidel Castro prit le pouvoir à Cuba ?" },
   ]},
   { id: 20, items: [
-    { level: 0, label: "20)", points: 1, text: "Comment s'appelle l'ours, ami de Mowgli, dans le Livre de la Jungle ?" },
+    { level: 0, label: "20)", points: 1, text: "Comment s'appellent l'ours, ami de Mowgli, dans le Livre de la Jungle ?" },
     { level: 1, label: "a)", points: 2, text: "Qui est l'inventeur de Pinocchio ?" },
     { level: 2, label: "i.", points: 4, text: "Quel est le nom du personnage incarné par Johnny Depp dans le film Alice au Pays des merveilles de Tim Burton ?" },
     { level: 3, label: "–", points: 3, text: "Comment s'appelle le grand ennemi de Picsou ?" },
@@ -382,13 +394,11 @@ const BLOCKS = [
 ];
 
 const TOTAL_BLOCKS = BLOCKS.length;
-
 const $ = (id) => document.getElementById(id);
 const screenStart = $("screen-start");
 const screenQuiz = $("screen-quiz");
 const screenEnd = $("screen-end");
 const nameInput = $("nameInput");
-const startError = $("startError");
 const progressEl = $("progress");
 const scoreEl = $("score");
 const kickerEl = $("kicker");
@@ -398,187 +408,98 @@ const btnStart = $("btnStart");
 const btnRight = $("btnRight");
 const btnWrong = $("btnWrong");
 const btnUndo = $("btnUndo");
-const btnQuit = $("btnQuit");
 const finalScoreEl = $("finalScore");
-const leaderboardStatusEl = $("leaderboardStatus");
+const scoreMessageEl = $("scoreMessage");
 const leaderboardEl = $("leaderboard");
-const btnRestart = $("btnRestart");
 
-let playerName = "";
-let score = 0;
-let blockIndex = 0;
-let levelIndex = 0;
-let startedAt = null;
-let history = [];
+let playerName = "", score = 0, blockIndex = 0, levelIndex = 0, history = [];
 
-function normalizeName(s){
-  return (s || "").trim().toLowerCase().replace(/\s+/g, " ");
-}
-
-function show(screen){
-  screenStart.classList.add("hidden");
-  screenQuiz.classList.add("hidden");
-  screenEnd.classList.add("hidden");
-  screen.classList.remove("hidden");
-}
-
-function currentItem(){
-  if (blockIndex >= TOTAL_BLOCKS) return null;
-  return BLOCKS[blockIndex].items[levelIndex];
-}
+function show(screen){ [screenStart,screenQuiz,screenEnd].forEach(s=>s.classList.add("hidden")); screen.classList.remove("hidden"); }
+function currentItem(){ return blockIndex >= TOTAL_BLOCKS ? null : BLOCKS[blockIndex].items[levelIndex]; }
 
 function updateHeader(){
-  const blockNo = Math.min(blockIndex + 1, TOTAL_BLOCKS);
-  progressEl.textContent = (blockIndex >= TOTAL_BLOCKS)
-    ? "Fin"
-    : `Bloc ${blockNo}/${TOTAL_BLOCKS} · ${currentItem().label}`;
+  progressEl.textContent = blockIndex >= TOTAL_BLOCKS ? "Fin" : `Bloc ${blockIndex+1}/${TOTAL_BLOCKS}`;
   scoreEl.textContent = `Score : ${score}`;
 }
 
 function renderQuestion(){
-  const item = currentItem();
-  if (!item) return;
-  kickerEl.textContent = `Bloc ${blockIndex + 1} · ${item.label}`;
+  const item = currentItem(); if(!item) return;
+  kickerEl.textContent = `Question ${blockIndex+1} · ${item.label}`;
   questionTextEl.textContent = item.text;
-  questionPointsEl.textContent = `${item.points} point${item.points > 1 ? "s" : ""}`;
+  questionPointsEl.textContent = `${item.points} point${item.points>1?"s":""}`;
   btnUndo.disabled = history.length === 0;
   updateHeader();
 }
 
 function goNextOnCorrect(){
   const item = currentItem();
-  const prev = { prevBlockIndex: blockIndex, prevLevelIndex: levelIndex, prevScore: score, action: "right" };
+  history.push({prevBlockIndex:blockIndex, prevLevelIndex:levelIndex, prevScore:score});
   score += item.points;
-  if (levelIndex < 3){ levelIndex += 1; } else { blockIndex += 1; levelIndex = 0; }
-  history.push(prev);
-  if (blockIndex >= TOTAL_BLOCKS){ finishQuiz(); return; }
+  if(levelIndex < 3){ levelIndex++; } else { blockIndex++; levelIndex=0; }
+  if(blockIndex >= TOTAL_BLOCKS){ finishQuiz(); return; }
   renderQuestion();
 }
 
 function goNextOnWrong(){
-  const prev = { prevBlockIndex: blockIndex, prevLevelIndex: levelIndex, prevScore: score, action: "wrong" };
-  blockIndex += 1; levelIndex = 0;
-  history.push(prev);
-  if (blockIndex >= TOTAL_BLOCKS){ finishQuiz(); return; }
+  history.push({prevBlockIndex:blockIndex, prevLevelIndex:levelIndex, prevScore:score});
+  blockIndex++; levelIndex=0;
+  if(blockIndex >= TOTAL_BLOCKS){ finishQuiz(); return; }
   renderQuestion();
 }
 
 function undo(){
-  const last = history.pop();
-  if (!last) return;
-  blockIndex = last.prevBlockIndex;
-  levelIndex = last.prevLevelIndex;
-  score = last.prevScore;
-  if (blockIndex >= TOTAL_BLOCKS){ show(screenQuiz); }
+  const last = history.pop(); if(!last) return;
+  blockIndex=last.prevBlockIndex; levelIndex=last.prevLevelIndex; score=last.prevScore;
   renderQuestion();
 }
 
-function quit(){
-  if (!confirm("Quitter le quiz ? Ton score ne sera pas enregistré.")) return;
-  resetAll();
-}
-
-function resetAll(){
-  playerName = ""; score = 0; blockIndex = 0; levelIndex = 0; history = []; startedAt = null;
-  leaderboardEl.innerHTML = ""; leaderboardStatusEl.textContent = "";
-  startError.textContent = ""; nameInput.value = "";
-  updateHeader(); show(screenStart);
-}
-
-async function apiGet(action, params = {}) {
-  const url = new URL(API_BASE);
-  url.searchParams.set("action", action);
-  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-  const res = await fetch(url.toString(), { method: "GET", cache: "no-store" });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return await res.json();
-}
-
-async function apiPost(action, payload = {}) {
-  const res = await fetch(API_BASE, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ action, ...payload })
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return await res.json();
-}
-
 function renderLeaderboard(entries){
-  leaderboardEl.innerHTML = "";
-  for (const e of entries){
+  leaderboardEl.innerHTML="";
+  entries.sort((a,b) => b.score - a.score).forEach((e, idx) => {
+    const rank = idx + 1;
     const li = document.createElement("li");
-    const row = document.createElement("div");
-    row.className = "lbRow";
-    const name = document.createElement("span");
-    name.className = "lbName"; name.textContent = e.name;
-    const sc = document.createElement("span");
-    sc.className = "lbScore"; sc.textContent = `${e.score}`;
-    row.appendChild(name); row.appendChild(sc); li.appendChild(row); leaderboardEl.appendChild(li);
-  }
+    if(rank <= 3) li.className = `rank-${rank}`;
+    
+    let medal = "";
+    if(rank === 1) medal = "🥇 ";
+    else if(rank === 2) medal = "🥈 ";
+    else if(rank === 3) medal = "🥉 ";
+
+    const dateStr = e.date ? new Date(e.date).toLocaleDateString('fr-FR') : new Date().toLocaleDateString('fr-FR');
+
+    li.innerHTML = `
+      <div class="lbRow">
+        <span class="lbName">${medal}${e.name}</span>
+        <span class="lbScore">${e.score} pts</span>
+      </div>
+      <div class="lbDate">Joué le ${dateStr}</div>
+    `;
+    leaderboardEl.appendChild(li);
+  });
 }
 
-async function checkNameAvailable(name){
-  const norm = normalizeName(name);
-  if (!norm) return { ok: false, msg: "Entre un prénom." };
-  if (!API_BASE || API_BASE.includes("PASTE_YOUR")){
-    return { ok: false, msg: "API non configurée. Colle l'URL Apps Script dans app.js (API_BASE)." };
-  }
-  try{
-    const data = await apiGet("leaderboard");
-    const names = new Set((data.entries || []).map(e => normalizeName(e.name)));
-    if (names.has(norm)) return { ok: false, msg: "Prénom déjà utilisé." };
-    return { ok: true, msg: "" };
-  } catch(e){
-    return { ok: false, msg: `Impossible de vérifier le prénom (${e.message}).` };
-  }
-}
-
-async function start(){
-  startError.textContent = "";
-  const name = nameInput.value.trim();
-  const check = await checkNameAvailable(name);
-  if (!check.ok){ startError.textContent = check.msg; return; }
-  playerName = name; startedAt = new Date().toISOString();
-  score = 0; blockIndex = 0; levelIndex = 0; history = [];
-  show(screenQuiz); renderQuestion();
-}
-
-async function finishQuiz(){
-  finalScoreEl.textContent = `${score}`;
+function finishQuiz(){
+  finalScoreEl.textContent = score;
+  scoreMessageEl.textContent = score > 80 ? "Excellent !" : score > 50 ? "Pas mal !" : "Tu peux faire mieux !";
   show(screenEnd);
-  leaderboardStatusEl.textContent = "Enregistrement du score…";
-  leaderboardEl.innerHTML = "";
-  const payload = {
-    name: playerName, score, startedAt,
-    finishedAt: new Date().toISOString(),
-    details: { blocks: TOTAL_BLOCKS, actions: history.map(h => h.action), userAgent: navigator.userAgent }
-  };
-  try{
-    const data = await apiPost("submitScore", payload);
-    leaderboardStatusEl.textContent = data.message || "Score enregistré.";
-    renderLeaderboard(data.entries || []);
-  } catch(e){
-    if (e.status === 409){
-      leaderboardStatusEl.textContent = "Prénom déjà utilisé. Reviens en arrière et choisis-en un autre.";
-    } else {
-      leaderboardStatusEl.textContent = `Erreur: ${e.message}`;
-    }
-    try{ const lb = await apiGet("leaderboard"); renderLeaderboard(lb.entries || []); } catch(_){}
-  }
-  updateHeader();
+  // Simuler l'envoi et l'affichage (à lier avec ton Apps Script)
+  const fakeEntries = [{name: playerName, score: score, date: new Date().toISOString()}];
+  renderLeaderboard(fakeEntries);
 }
 
-btnStart.addEventListener("click", start);
-nameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") start(); });
+btnStart.addEventListener("click", () => {
+  if(!nameInput.value.trim()) return;
+  playerName = nameInput.value;
+  show(screenQuiz);
+  renderQuestion();
+});
+
 btnRight.addEventListener("click", goNextOnCorrect);
 btnWrong.addEventListener("click", goNextOnWrong);
 btnUndo.addEventListener("click", undo);
-btnQuit.addEventListener("click", quit);
-btnRestart.addEventListener("click", resetAll);
+btnRestart.addEventListener("click", () => location.reload());
 
 updateHeader();
-show(screenStart);
   </script>
 </body>
 </html>
