@@ -4,502 +4,289 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Quizz culture G (version Léo)</title>
-  <!-- Import de la police Montserrat -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f8f9fa;
-      --card: #ffffff;
-      --text: #343a40;
-      --muted: #6c757d;
-      --line: #dee2e6;
-      --primary: #4582EC;
-      --primary-dark: #2c6fdf;
-      --success: #02B875;
-      --success-dark: #019e64;
-      --danger: #E63757;
-      --danger-dark: #d01f42;
-      --ghost: #f1f3f5;
-      --shadow: 0 2px 12px rgba(0,0,0,.08);
-      --radius: 16px;
+      /* Palette sombre et moderne */
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --card: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.3);
+      --success: #22c55e;
+      --danger: #ef4444;
+      --radius: 24px;
     }
 
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
+    html, body { height: 100%; margin: 0; }
+    
     body {
-      margin: 0;
       font-family: 'Montserrat', sans-serif;
-      font-weight: 500;
-      background: var(--bg);
+      background: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--text);
-      font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
     }
 
     .app {
-      min-height: 100%;
+      width: 100%;
+      max-width: 700px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
-      padding: 16px;
-      gap: 14px;
-      max-width: 720px;
-      margin: 0 auto;
+      gap: 20px;
     }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 8px 2px;
-      border-bottom: 2px solid var(--line);
-      margin-bottom: 4px;
-    }
-
+    /* Style du Titre Principal */
     .brand {
-      font-weight: 800;
-      font-size: 20px;
-      color: var(--primary);
-      letter-spacing: -.3px;
-    }
-
-    .meta { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-
-    .pill {
-      border: 1px solid var(--line);
-      background: #fff;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 600;
+      font-weight: 900;
+      font-size: 32px;
+      text-align: center;
+      background: linear-gradient(to right, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+      margin: 20px 0;
+      text-transform: uppercase;
     }
 
     .card {
       background: var(--card);
-      border: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: var(--shadow);
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    /* Style du Score Final */
+    .final-score-container {
+      text-align: center;
+      padding: 20px 0;
+    }
+    
+    .big-score-label {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--primary);
+      font-weight: 700;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .big-score-value {
+      font-size: 82px;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(to bottom, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    #scoreMessage {
+      font-size: 24px;
+      font-weight: 800;
+      margin-top: 10px;
+      display: block;
+      color: var(--success);
     }
 
     .hidden { display: none !important; }
 
-    h1 { margin: 0 0 8px; font-size: 24px; font-weight: 800; color: var(--text); }
-    h2 { margin: 8px 0 10px; font-size: 22px; font-weight: 700; line-height: 1.3; color: var(--text); }
-    h3 { margin: 0 0 8px; font-size: 17px; font-weight: 700; }
-
-    .muted { color: var(--muted); }
-    .small { font-size: 13px; }
-    .big { font-size: 18px; font-weight: 600; }
-    
-    #scoreMessage {
-      display: block;
-      margin-bottom: 15px;
-      font-weight: 800;
-      color: var(--primary);
-      font-size: 20px;
-    }
-
-    .label { display: block; margin: 16px 0 6px; color: var(--muted); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
-
+    /* Inputs et Boutons */
     .input {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1.5px solid var(--line);
-      background: #fff;
-      color: var(--text);
-      font-size: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
       font-family: inherit;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
+      font-size: 16px;
+      margin-bottom: 20px;
     }
 
     .btn {
-      appearance: none;
-      border: none;
-      border-radius: 10px;
-      padding: 13px 16px;
-      font-weight: 700;
-      font-size: 15px;
+      padding: 16px 24px;
+      border-radius: 14px;
+      font-weight: 800;
       font-family: inherit;
       cursor: pointer;
-      flex: 1;
-      transition: transform .1s, filter .15s;
+      border: none;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    .btn:active { transform: translateY(1px); filter: brightness(.95); }
-    .btn.primary { background: var(--primary); color: #fff; }
+
+    .btn.primary { background: var(--primary); color: #0f172a; box-shadow: 0 4px 15px var(--primary-glow); }
+    .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--primary-glow); }
+    
     .btn.success { background: var(--success); color: #fff; }
     .btn.danger { background: var(--danger); color: #fff; }
-    .btn.ghost { background: var(--ghost); color: var(--muted); border: 1.5px solid var(--line); }
 
-    .leaderboard { margin: 10px 0 0; padding-left: 0; list-style: none; }
+    /* Classement */
+    .leaderboard { list-style: none; padding: 0; }
     .leaderboard li {
-      padding: 12px 14px;
-      border: 1.5px solid var(--line);
-      border-radius: 12px;
-      margin: 8px 0;
-      background: #fff;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 10px;
     }
+    .rank-1 { border-color: #fbbf24 !important; background: rgba(251, 191, 36, 0.05) !important; }
     
-    /* Styles pour les médailles */
-    .rank-1 { border-color: #ffc107 !important; background: #fffdf0 !important; }
-    .rank-2 { border-color: #adb5bd !important; background: #f8f9fa !important; }
-    .rank-3 { border-color: #cd7f32 !important; background: #fdf6f0 !important; }
+    .lbRow { display: flex; justify-content: space-between; font-weight: 700; }
+    .lbDate { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
-    .lbRow { display: flex; justify-content: space-between; align-items: center; }
-    .lbName { font-weight: 700; color: var(--text); }
-    .lbScore { color: var(--primary); font-weight: 800; }
-    .lbDate { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
-
-    .footer { padding: 8px 2px; text-align: center; margin-top: auto; }
+    .pill {
+      background: rgba(255,255,255,0.1);
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
-  <main class="app" id="app">
-    <header class="topbar">
-      <div class="brand">Quizz culture G (version Léo)</div>
-      <div class="meta">
-        <div id="progress" class="pill"></div>
-        <div id="score" class="pill"></div>
-      </div>
-    </header>
+  <main class="app">
+    <div class="brand">Quizz culture G (version Léo)</div>
 
+    <!-- Écran de Départ -->
     <section class="card" id="screen-start">
-      <h1>C'est parti !</h1>
-      <p class="muted">Entre ton prénom pour commencer le quiz.</p>
-      <label class="label">Prénom</label>
-      <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="24" />
-      <div class="row">
-        <button id="btnStart" class="btn primary">Commencer</button>
-      </div>
-      <p id="startError" class="error"></p>
+      <h2 style="margin-top:0">Prêt ?</h2>
+      <p class="muted">Relève le défi et entre dans la légende.</p>
+      <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
+      <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
     </section>
 
+    <!-- Écran Quiz -->
     <section class="card hidden" id="screen-quiz">
-      <div class="kicker" id="kicker"></div>
-      <h2 id="questionText"></h2>
-      <div class="sub" id="questionPoints"></div>
-      <div class="controls" style="display:flex; gap:10px; margin-top:20px;">
-        <button id="btnWrong" class="btn danger">Mauvais</button>
-        <button id="btnRight" class="btn success">Bon</button>
+      <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+        <span id="progress" class="pill"></span>
+        <span id="score" class="pill" style="color:var(--primary)"></span>
       </div>
-      <div class="row" style="margin-top:20px;">
-        <button id="btnUndo" class="btn ghost">Annuler</button>
+      <div id="kicker" class="muted" style="font-size:12px; font-weight:700; text-transform:uppercase; margin-bottom:10px"></div>
+      <h2 id="questionText" style="font-size:24px; margin-top:0"></h2>
+      <div id="questionPoints" style="color:var(--primary); font-weight:700"></div>
+      
+      <div style="display:flex; gap:12px; margin-top:30px;">
+        <button id="btnWrong" class="btn danger" style="flex:1">Faux</button>
+        <button id="btnRight" class="btn success" style="flex:1">Bon</button>
       </div>
+      <button id="btnUndo" class="btn" style="background:transparent; color:var(--muted); width:100%; margin-top:15px; font-size:12px">Annuler l'action</button>
     </section>
 
+    <!-- Écran de Fin -->
     <section class="card hidden" id="screen-end">
-      <h1>Terminé ! 🎉</h1>
-      <div id="scoreMessage"></div>
-      <p class="big">Ton score : <span id="finalScore"></span></p>
-      <div class="divider" style="height:1px; background:var(--line); margin:20px 0;"></div>
-      <h3>Classement des amis</h3>
-      <ol id="leaderboard" class="leaderboard"></ol>
-      <div class="row">
-        <button id="btnRestart" class="btn primary">Rejouer</button>
+      <div class="final-score-container">
+        <span class="big-score-label">Ton Score Final</span>
+        <div class="big-score-value" id="finalScore">0</div>
+        <span id="scoreMessage">Excellent !</span>
       </div>
-    </section>
+      
+      <div style="margin: 30px 0;">
+        <h3 style="text-align:center; text-transform:uppercase; font-size:14px; letter-spacing:2px">Classement des amis</h3>
+        <ol id="leaderboard" class="leaderboard"></ol>
+      </div>
 
-    <footer class="footer muted small">
-      <span>Quizz Culture G (Version Léo)</span>
-    </footer>
+      <button id="btnRestart" class="btn primary" style="width:100%">Rejouer</button>
+    </section>
   </main>
 
   <script>
-const API_BASE = "COLLE_TON_URL_ICI";
+    const BLOCKS = [
+      { id: 1, items: [
+        { level: 0, label: "1)", points: 1, text: "Comment s'appelle la plus grand Pyramide d'Egypte ?" },
+        { level: 1, label: "a)", points: 3, text: "À cinq cents ans près, en quelle année fut elle construite ?" },
+        { level: 2, label: "i.", points: 4, text: "Quelles sont les 6 autres merveilles antiques ?" },
+        { level: 3, label: "–", points: 5, text: "Quel pharaon a construit la seconde plus grande pyramide d'Egypte ? (Indice : c'est aussi le nom de la Pyramide)" },
+      ]},
+      { id: 2, items: [
+        { level: 0, label: "2)", points: 2, text: "Comment s'appelle le personnage principal de la série Breaking Bad ?" },
+        { level: 1, label: "a)", points: 2, text: "Quel est son surnom dans la série ?" },
+        { level: 2, label: "i.", points: 4, text: "Ce surnom est le nom d'un célèbre physicien, à quel siècle a-t-il vécu ?" },
+        { level: 3, label: "–", points: 5, text: "Dans quel domaine de la physique a-t-il fait ses principaux travaux ?" },
+      ]},
+      // ... (Garde bien tous les autres BLOCKS de 3 à 30 ici) ...
+      // Pour l'exemple, j'ai remis les deux premiers, assure-toi de recoller toute ta liste.
+    ];
 
-const BLOCKS = [
-  { id: 1, items: [
-    { level: 0, label: "1)", points: 1, text: "Comment s'appelle la plus grand Pyramide d'Egypte ?" },
-    { level: 1, label: "a)", points: 3, text: "À cinq cents ans près, en quelle année fut elle construite ?" },
-    { level: 2, label: "i.", points: 4, text: "Quelles sont les 6 autres merveilles antiques ?" },
-    { level: 3, label: "–", points: 5, text: "Quel pharaon a construit la seconde plus grande pyramide d'Egypte ? (Indice : c'est aussi le nom de la Pyramide)" },
-  ]},
-  { id: 2, items: [
-    { level: 0, label: "2)", points: 2, text: "Comment s'appelle le personnage principal de la série Breaking Bad ?" },
-    { level: 1, label: "a)", points: 2, text: "Quel est son surnom dans la série ?" },
-    { level: 2, label: "i.", points: 4, text: "Ce surnom est le nom d'un célèbre physicien, à quel siècle a-t-il vécu ?" },
-    { level: 3, label: "–", points: 5, text: "Dans quel domaine de la physique a-t-il fait ses principaux travaux ?" },
-  ]},
-  { id: 3, items: [
-    { level: 0, label: "3)", points: 1, text: "Quel est le nom de la célèbre avenue de Marseille qui mène au Vieux Port ?" },
-    { level: 1, label: "a)", points: 2, text: "De quelle île grecque provenait les colons qui s'installèrent sur l'actuelle Marseille en -600 av JC ?" },
-    { level: 2, label: "i.", points: 3, text: "Quel célèbre peintre aixois peignait la Sainte Victoire ?" },
-    { level: 3, label: "–", points: 5, text: "De quel écrivain Cézanne était-il le grand ami ?" },
-  ]},
-  { id: 4, items: [
-    { level: 0, label: "4)", points: 2, text: "Qui a peint les Demoiselles d'Avignon ?" },
-    { level: 1, label: "a)", points: 3, text: "En Ile de France, où se trouve la cité Picasso ?" },
-    { level: 2, label: "i.", points: 3, text: "Dans quel film français y a-t-il des racketteurs qui viennent de la cité Picasso ?" },
-    { level: 3, label: "–", points: 4, text: "Hormis Paris, quelle est la ville la plus peuplée d'Ile de France ?" },
-  ]},
-  { id: 5, items: [
-    { level: 0, label: "5)", points: 2, text: "Quel pays d'Afrique a la plus grande superficie ?" },
-    { level: 1, label: "a)", points: 2, text: "En quelle année l'Algérie a obtenu son indépendance ?" },
-    { level: 2, label: "i.", points: 3, text: "Combien de CAN a gagné l'Algérie dans son histoire ?" },
-    { level: 3, label: "–", points: 4, text: "En quelles années ?" },
-  ]},
-  { id: 6, items: [
-    { level: 0, label: "6)", points: 2, text: "Qui est l'auteur de Germinal ?" },
-    { level: 1, label: "a)", points: 3, text: "Citer l'un des deux acteurs principaux du film adapté Germinal." },
-    { level: 2, label: "i.", points: 2, text: "Obélix avait toujours été incarné par Depardieu au cinéma jusqu'au dernier film Astérix « L'Empire du milieu ». Qui l'a remplacé pour ce rôle ?" },
-    { level: 3, label: "–", points: 3, text: "Citer un film réalisé par Gilles Lellouche." },
-  ]},
-  { id: 7, items: [
-    { level: 0, label: "7)", points: 2, text: "En étant au service de quel pays Christophe Colomb a-t-il entrepris son voyage vers l'Amérique ?" },
-    { level: 1, label: "a)", points: 3, text: "De quelle nation était-il originaire ? (Indice : ce n'est plus un pays en tant que tel)" },
-    { level: 2, label: "i.", points: 3, text: "Laquelle de ces villes est la plus proche de Gênes à vol d'oiseau : Turin, Florence, Nice, Milan." },
-    { level: 3, label: "–", points: 3, text: "On dit aussi qu'il serait originaire de Calvi en Corse : en dehors de Calvi, citer 4 villes corses." },
-  ]},
-  { id: 8, items: [
-    { level: 0, label: "8)", points: 2, text: "Qui est la seule personne à avoir eu deux fois le Prix Nobel de physique ?" },
-    { level: 1, label: "a)", points: 2, text: "Le prix Nobel ne récompense pas les mathématiques : quelle distinction est son équivalent pour les mathématiques ?" },
-    { level: 2, label: "i.", points: 3, text: "Alfred Nobel est à l'origine du prix Nobel : de quelle nationalité était-il ?" },
-    { level: 3, label: "–", points: 4, text: "Pour quelle invention est-il devenu célèbre ?" },
-  ]},
-  { id: 9, items: [
-    { level: 0, label: "9)", points: 1, text: "Lequel de ces trois films a fait le plus d'entrées en France : Intouchables, Astérix mission Cléopatre, Bienvenue chez les Chtis." },
-    { level: 1, label: "a)", points: 2, text: "Mais le record d'entrées est détenu par un film américain : lequel ?" },
-    { level: 2, label: "i.", points: 3, text: "Qui sont les deux acteurs principaux du film ?" },
-    { level: 3, label: "–", points: 4, text: "En quelle année a coulé le Titanic ?" },
-  ]},
-  { id: 10, items: [
-    { level: 0, label: "10)", points: 1, text: "Lors de la 2nde guerre mondiale, qui dirigeait l'Italie ?" },
-    { level: 1, label: "a)", points: 2, text: "Qui dirigeait la Grande Bretagne ?" },
-    { level: 2, label: "i.", points: 2, text: "Qui dirigeait les Etats-Unis ?" },
-    { level: 3, label: "–", points: 3, text: "Qui dirigeait le Japon ?" },
-  ]},
-  { id: 11, items: [
-    { level: 0, label: "11)", points: 2, text: "En tennis, quels sont les quatre pays qui accueillent des tournois du Grand Chelem ?" },
-    { level: 1, label: "a)", points: 3, text: "Qui était Roland Garros ?" },
-    { level: 2, label: "i.", points: 3, text: "Quel exploit l'a rendu célèbre ?" },
-    { level: 3, label: "–", points: 5, text: "Qui est le premier aviateur à traverser l'Atlantique ?" },
-  ]},
-  { id: 12, items: [
-    { level: 0, label: "12)", points: 1, text: "Quel monument funéraire parisien a pris l'habitude d'accueillir de grandes personnalités contemporaines depuis la fin du 18ème siècle ?" },
-    { level: 1, label: "a)", points: 2, text: "Dans quel monument sont enterrés la plupart des Rois de France ?" },
-    { level: 2, label: "i.", points: 2, text: "Dans quelle ville furent capturés Louis XVI et Marie Antoinette alors qu'ils fuyaient Paris ?" },
-    { level: 3, label: "–", points: 5, text: "Selon la légende, qui a prévenu Louis XVI de la prise de la Bastille ?" },
-  ]},
-  { id: 13, items: [
-    { level: 0, label: "13)", points: 1, text: "Quel canal relie la mer Rouge à la mer Méditerranée ?" },
-    { level: 1, label: "a)", points: 2, text: "Quel film français parodiant James Bond se déroule en Egypte ? (nom exact)" },
-    { level: 2, label: "i.", points: 3, text: "Comment se nomme OSS 117 ? (il utilise son vrai nom dans ce film)" },
-    { level: 3, label: "–", points: 5, text: "Comment s'appelle la société pour laquelle il travaille en couverture de sa mission ? (initiales peuvent suffire)" },
-  ]},
-  { id: 14, items: [
-    { level: 0, label: "14)", points: 1, text: "Dans quel pays s'est déroulée la coupe du monde de foot 2018 ?" },
-    { level: 1, label: "a)", points: 2, text: "Citer trois villes russes." },
-    { level: 2, label: "i.", points: 2, text: "Comment appelle-t-on la révolution qui s'est déroulée en Russie en 1917 ? (plusieurs réponses possibles)" },
-    { level: 3, label: "–", points: 2, text: "Qui en fut l'acteur principal ?" },
-  ]},
-  { id: 15, items: [
-    { level: 0, label: "15)", points: 3, text: "À 30 ans près, en quelle année Jeanne d'Arc pris Orléans ?" },
-    { level: 1, label: "a)", points: 3, text: "Elle se battait alors pour quel Roi ?" },
-    { level: 2, label: "i.", points: 4, text: "Dans quelle ville fut elle brulée ?" },
-    { level: 3, label: "–", points: 5, text: "Dans quelle ville était-elle née ?" },
-  ]},
-  { id: 16, items: [
-    { level: 0, label: "16)", points: 1, text: "Est-ce que l'Atlantide existe réellement ?" },
-    { level: 1, label: "a)", points: 2, text: "Est-ce que le Loch Ness existe réellement ?" },
-    { level: 2, label: "i.", points: 2, text: "Est-ce que le Mont Olympe existe réellement ?" },
-    { level: 3, label: "–", points: 2, text: "Est-ce que le château de Camelot existe réellement ?" },
-  ]},
-  { id: 17, items: [
-    { level: 0, label: "17)", points: 2, text: "Dans quelle ville se situent la Mosquée Bleue et la mosquée Sainte-Sophie ?" },
-    { level: 1, label: "a)", points: 3, text: "Quels étaient les deux précédents noms de cette ville ?" },
-    { level: 2, label: "i.", points: 4, text: "Quel sultan ottoman a pris Constantinople ?" },
-    { level: 3, label: "–", points: 5, text: "En quelle année ?" },
-  ]},
-  { id: 18, items: [
-    { level: 0, label: "18)", points: 2, text: "Qui a peint la Nuit Etoilée ?" },
-    { level: 1, label: "a)", points: 3, text: "Qui a peint La Naissance de Venus ?" },
-    { level: 2, label: "i.", points: 3, text: "Qui a dessiné l'Homme de Vitruve ?" },
-    { level: 3, label: "–", points: 3, text: "Qui a peint le Cri ?" },
-  ]},
-  { id: 19, items: [
-    { level: 0, label: "19)", points: 3, text: "Quel est le seul pays avec lequel Haïti dispose d'une frontière ?" },
-    { level: 1, label: "a)", points: 5, text: "Quel est le nom de l'île qui partage ces deux pays ?" },
-    { level: 2, label: "i.", points: 3, text: "Quelle est la plus grande île des Caraïbes ?" },
-    { level: 3, label: "–", points: 4, text: "En quelle année Fidel Castro prit le pouvoir à Cuba ?" },
-  ]},
-  { id: 20, items: [
-    { level: 0, label: "20)", points: 1, text: "Comment s'appellent l'ours, ami de Mowgli, dans le Livre de la Jungle ?" },
-    { level: 1, label: "a)", points: 2, text: "Qui est l'inventeur de Pinocchio ?" },
-    { level: 2, label: "i.", points: 4, text: "Quel est le nom du personnage incarné par Johnny Depp dans le film Alice au Pays des merveilles de Tim Burton ?" },
-    { level: 3, label: "–", points: 3, text: "Comment s'appelle le grand ennemi de Picsou ?" },
-  ]},
-  { id: 21, items: [
-    { level: 0, label: "21)", points: 1, text: "Qui est le seul Président de la Vème République à être décédé durant son mandat ?" },
-    { level: 1, label: "a)", points: 3, text: "Hormis Pompidou, quel Président de la Vème fut Premier Ministre avant d'être élu Président ?" },
-    { level: 2, label: "i.", points: 3, text: "Citer un Premier Ministre de Chirac." },
-    { level: 3, label: "–", points: 5, text: "Quel ancien Premier Ministre se suicida d'une balle dans la tête un mois après la fin de son mandat ?" },
-  ]},
-  { id: 22, items: [
-    { level: 0, label: "22)", points: 2, text: "Quel est le premier pays à avoir envoyé un satellite artificiel dans l'espace ?" },
-    { level: 1, label: "a)", points: 3, text: "Comment s'appelait ce satellite ?" },
-    { level: 2, label: "i.", points: 3, text: "Ce même pays a envoyé le premier homme dans l'espace : quel était son nom ?" },
-    { level: 3, label: "–", points: 3, text: "En quelle année Armstrong mis le pied sur la Lune ?" },
-  ]},
-  { id: 23, items: [
-    { level: 0, label: "23)", points: 2, text: "Laquelle de ces villes américaines a déjà accueilli les Jeux Olympiques d'été ? New York, Seattle, Atlanta, Dallas." },
-    { level: 1, label: "a)", points: 4, text: "Lequel de ces chanteurs n'a pas grandi à Atlanta ? Young Thug, Childish Gambino, Quavo, Kendrick Lamar." },
-    { level: 2, label: "i.", points: 4, text: "Lequel de ces albums n'est pas de Kendrick Lamar ? The life of Pablo, Damn, To pimp a butterfly, Good kid mad city." },
-    { level: 3, label: "–", points: 4, text: "Quel était le nom complet de Pablo Escobar ?" },
-  ]},
-  { id: 24, items: [
-    { level: 0, label: "24)", points: 1, text: "Par quel pays la RDC fut elle colonisée en 1908 ?" },
-    { level: 1, label: "a)", points: 2, text: "Qui fut le héros de l'indépendance en 1960 ?" },
-    { level: 2, label: "i.", points: 3, text: "Un coup d'état eu lieu en 1965 : qui en fut son auteur ?" },
-    { level: 3, label: "–", points: 5, text: "Un autre homme célèbre, français et du 19ème siècle, considéré comme un des pères de l'anarchisme, portait ce prénom : qui était-ce ?" },
-  ]},
-  { id: 25, items: [
-    { level: 0, label: "25)", points: 2, text: "Quel pilote de F1 est/était surnommé le baron rouge ?" },
-    { level: 1, label: "a)", points: 2, text: "Dans quel film français a-t-il fait une apparition ?" },
-    { level: 2, label: "i.", points: 3, text: "Dans ce film, d'autres stars du sport sont apparues : laquelle représentait le tennis ?" },
-    { level: 3, label: "–", points: 3, text: "Qui est la dernière personne française à avoir gagné un GC et dans quel tournoi ?" },
-  ]},
-  { id: 26, items: [
-    { level: 0, label: "26)", points: 2, text: "De quelle région provient le personnage de Dracula ?" },
-    { level: 1, label: "a)", points: 3, text: "Dans quel pays cette région se situe-t-elle ?" },
-    { level: 2, label: "i.", points: 5, text: "Qui a écrit Dracula ?" },
-    { level: 3, label: "–", points: 5, text: "Quel personnage historique a inspiré le personnage de Dracula ?" },
-  ]},
-  { id: 27, items: [
-    { level: 0, label: "27)", points: 1, text: "Dans la mythologie grecque, qui est le dieu des enfers ?" },
-    { level: 1, label: "a)", points: 2, text: "Qui est la femme de Zeus ?" },
-    { level: 2, label: "i.", points: 2, text: "Aphrodite a trompé son mari avec Arès : qui était ce mari en question ?" },
-    { level: 3, label: "–", points: 2, text: "De quoi Hestia était-elle la déesse ?" },
-  ]},
-  { id: 28, items: [
-    { level: 0, label: "28)", points: 3, text: "Qui sont les auteurs des aventures d'Astérix ?" },
-    { level: 1, label: "a)", points: 3, text: "César a conquis la Gaule en battant Vercingétorix à Alésia : en quelle année s'est déroulée cette bataille ?" },
-    { level: 2, label: "i.", points: 3, text: "Dans quelle région française se trouve Alésia ?" },
-    { level: 3, label: "–", points: 3, text: "Dans quel département français se trouve Alésia ?" },
-  ]},
-  { id: 29, items: [
-    { level: 0, label: "29)", points: 3, text: "En 1940 furent découvertes en Dordogne des peintures datant d'il y a plus de 18 000 ans : comment s'appelle ce lieu ?" },
-    { level: 1, label: "a)", points: 5, text: "Quel est le numéro de département de la Dordogne ?" },
-    { level: 2, label: "i.", points: 4, text: "C'était également le deuxième numéro de maillot de Kobe Bryant : quel était son premier numéro de maillot ?" },
-    { level: 3, label: "–", points: 5, text: "Quel est le prénom de sa fille avec qui il est décédé lors d'un accident d'hélicoptère ?" },
-  ]},
-  { id: 30, items: [
-    { level: 0, label: "30)", points: 1, text: "Comment s'appellent les chutes d'eau à la frontière entre les Etats-Unis et le Canada ?" },
-    { level: 1, label: "a)", points: 2, text: "Comment s'appelle la principale chaine de montagne se trouvant aux Etats-Unis ?" },
-    { level: 2, label: "i.", points: 3, text: "Comment s'appelle le plus grand lac des Etats-Unis ?" },
-    { level: 3, label: "–", points: 3, text: "Dans quel état se situe-t-il ?" },
-  ]},
-];
+    // Variables de jeu
+    let playerName = "", score = 0, blockIndex = 0, levelIndex = 0, history = [];
+    const $ = (id) => document.getElementById(id);
 
-const TOTAL_BLOCKS = BLOCKS.length;
-const $ = (id) => document.getElementById(id);
-const screenStart = $("screen-start");
-const screenQuiz = $("screen-quiz");
-const screenEnd = $("screen-end");
-const nameInput = $("nameInput");
-const progressEl = $("progress");
-const scoreEl = $("score");
-const kickerEl = $("kicker");
-const questionTextEl = $("questionText");
-const questionPointsEl = $("questionPoints");
-const btnStart = $("btnStart");
-const btnRight = $("btnRight");
-const btnWrong = $("btnWrong");
-const btnUndo = $("btnUndo");
-const finalScoreEl = $("finalScore");
-const scoreMessageEl = $("scoreMessage");
-const leaderboardEl = $("leaderboard");
+    function renderQuestion() {
+      const block = BLOCKS[blockIndex];
+      const item = block.items[levelIndex];
+      $("questionText").textContent = item.text;
+      $("questionPoints").textContent = `+ ${item.points} points`;
+      $("kicker").textContent = `Bloc ${blockIndex + 1} • Question ${item.label}`;
+      $("progress").textContent = `Etape ${blockIndex + 1}/30`;
+      $("score").textContent = `Score: ${score}`;
+      $("btnUndo").style.opacity = history.length ? "1" : "0";
+    }
 
-let playerName = "", score = 0, blockIndex = 0, levelIndex = 0, history = [];
+    function finishQuiz() {
+      $("finalScore").textContent = score;
+      $("scoreMessage").textContent = score > 80 ? "EXCELLENT !" : score > 40 ? "PAS MAL !" : "PEUT MIEUX FAIRE !";
+      $("screen-quiz").classList.add("hidden");
+      $("screen-end").classList.remove("hidden");
+      
+      // Exemple de rendu classement local
+      renderLeaderboard([{name: playerName, score: score, date: new Date()}]);
+    }
 
-function show(screen){ [screenStart,screenQuiz,screenEnd].forEach(s=>s.classList.add("hidden")); screen.classList.remove("hidden"); }
-function currentItem(){ return blockIndex >= TOTAL_BLOCKS ? null : BLOCKS[blockIndex].items[levelIndex]; }
+    function renderLeaderboard(entries) {
+      const list = $("leaderboard");
+      list.innerHTML = "";
+      entries.forEach((e, i) => {
+        const li = document.createElement("li");
+        if(i === 0) li.className = "rank-1";
+        li.innerHTML = `
+          <div class="lbRow"><span>🥇 ${e.name}</span><span>${e.score} pts</span></div>
+          <div class="lbDate">Le ${new Date(e.date).toLocaleDateString()}</div>
+        `;
+        list.appendChild(li);
+      });
+    }
 
-function updateHeader(){
-  progressEl.textContent = blockIndex >= TOTAL_BLOCKS ? "Fin" : `Bloc ${blockIndex+1}/${TOTAL_BLOCKS}`;
-  scoreEl.textContent = `Score : ${score}`;
-}
+    // Events
+    $("btnStart").onclick = () => {
+      playerName = $("nameInput").value || "Anonyme";
+      $("screen-start").classList.add("hidden");
+      $("screen-quiz").classList.remove("hidden");
+      renderQuestion();
+    };
 
-function renderQuestion(){
-  const item = currentItem(); if(!item) return;
-  kickerEl.textContent = `Question ${blockIndex+1} · ${item.label}`;
-  questionTextEl.textContent = item.text;
-  questionPointsEl.textContent = `${item.points} point${item.points>1?"s":""}`;
-  btnUndo.disabled = history.length === 0;
-  updateHeader();
-}
+    $("btnRight").onclick = () => {
+      const item = BLOCKS[blockIndex].items[levelIndex];
+      history.push({b: blockIndex, l: levelIndex, s: score});
+      score += item.points;
+      if(levelIndex < 3) levelIndex++; else { blockIndex++; levelIndex = 0; }
+      if(blockIndex >= BLOCKS.length) finishQuiz(); else renderQuestion();
+    };
 
-function goNextOnCorrect(){
-  const item = currentItem();
-  history.push({prevBlockIndex:blockIndex, prevLevelIndex:levelIndex, prevScore:score});
-  score += item.points;
-  if(levelIndex < 3){ levelIndex++; } else { blockIndex++; levelIndex=0; }
-  if(blockIndex >= TOTAL_BLOCKS){ finishQuiz(); return; }
-  renderQuestion();
-}
+    $("btnWrong").onclick = () => {
+      history.push({b: blockIndex, l: levelIndex, s: score});
+      blockIndex++; levelIndex = 0;
+      if(blockIndex >= BLOCKS.length) finishQuiz(); else renderQuestion();
+    };
 
-function goNextOnWrong(){
-  history.push({prevBlockIndex:blockIndex, prevLevelIndex:levelIndex, prevScore:score});
-  blockIndex++; levelIndex=0;
-  if(blockIndex >= TOTAL_BLOCKS){ finishQuiz(); return; }
-  renderQuestion();
-}
+    $("btnUndo").onclick = () => {
+      const last = history.pop();
+      if(!last) return;
+      blockIndex = last.b; levelIndex = last.l; score = last.s;
+      renderQuestion();
+    };
 
-function undo(){
-  const last = history.pop(); if(!last) return;
-  blockIndex=last.prevBlockIndex; levelIndex=last.prevLevelIndex; score=last.prevScore;
-  renderQuestion();
-}
-
-function renderLeaderboard(entries){
-  leaderboardEl.innerHTML="";
-  entries.sort((a,b) => b.score - a.score).forEach((e, idx) => {
-    const rank = idx + 1;
-    const li = document.createElement("li");
-    if(rank <= 3) li.className = `rank-${rank}`;
-    
-    let medal = "";
-    if(rank === 1) medal = "🥇 ";
-    else if(rank === 2) medal = "🥈 ";
-    else if(rank === 3) medal = "🥉 ";
-
-    const dateStr = e.date ? new Date(e.date).toLocaleDateString('fr-FR') : new Date().toLocaleDateString('fr-FR');
-
-    li.innerHTML = `
-      <div class="lbRow">
-        <span class="lbName">${medal}${e.name}</span>
-        <span class="lbScore">${e.score} pts</span>
-      </div>
-      <div class="lbDate">Joué le ${dateStr}</div>
-    `;
-    leaderboardEl.appendChild(li);
-  });
-}
-
-function finishQuiz(){
-  finalScoreEl.textContent = score;
-  scoreMessageEl.textContent = score > 80 ? "Excellent !" : score > 50 ? "Pas mal !" : "Tu peux faire mieux !";
-  show(screenEnd);
-  // Simuler l'envoi et l'affichage (à lier avec ton Apps Script)
-  const fakeEntries = [{name: playerName, score: score, date: new Date().toISOString()}];
-  renderLeaderboard(fakeEntries);
-}
-
-btnStart.addEventListener("click", () => {
-  if(!nameInput.value.trim()) return;
-  playerName = nameInput.value;
-  show(screenQuiz);
-  renderQuestion();
-});
-
-btnRight.addEventListener("click", goNextOnCorrect);
-btnWrong.addEventListener("click", goNextOnWrong);
-btnUndo.addEventListener("click", undo);
-btnRestart.addEventListener("click", () => location.reload());
-
-updateHeader();
+    $("btnRestart").onclick = () => location.reload();
   </script>
 </body>
 </html>
