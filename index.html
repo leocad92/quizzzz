@@ -153,17 +153,25 @@
   <main class="app">
     <div class="brand">QuizZ Culture G (version Léo)</div>
 
-    <section class="card" id="screen-start">
-      <h2 style="margin-top:0"> 
-        Règles :
-        Il y a 20 blocs
-        Si c’est bon, tu débloques la sous-question suivante (tiroir).
-        Si c’est faux, on passe au bloc suivant.</h2>
-        Il y a aussi des questions à choix multiples
-      <p class="muted">Prêt ?</p>
-      <input id="nameInput" class="input" placeholder="Ton prénom" maxlength="20" />
-      <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
-    </section>
+<!-- Écran de Départ -->
+<section class="card" id="screen-start" style="text-align: center;">
+  <div style="margin-bottom: 30px;">
+    <!-- "Règles :" seul sur sa ligne, centré et ultra gras -->
+    <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 15px;">Règles :</h2>
+    
+    <!-- Chaque phrase sur sa ligne, centrée -->
+    <p style="margin: 5px 0; font-weight: 500;">Il y a 20 blocs</p>
+    <p style="margin: 5px 0; font-weight: 500;">Si c’est bon, tu débloques la sous-question suivante (tiroir).</p>
+    <p style="margin: 5px 0; font-weight: 500;">Si c’est faux, on passe au bloc suivant.</p>
+    <p style="margin: 15px 0; font-weight: 500;">Il y a aussi des questions à choix multiples</p>
+    
+    <!-- "Prêt ?" en ultra gras -->
+    <h3 style="font-weight: 900; font-size: 24px; margin-top: 20px;">Prêt ?</h3>
+  </div>
+
+  <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
+  <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
+</section>
 
     <section class="card hidden" id="screen-quiz">
       <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
