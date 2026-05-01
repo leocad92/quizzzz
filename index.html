@@ -171,6 +171,13 @@
 
   <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
   <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
+  <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
+<button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
+
+<!-- Nouveau bouton pour voir le classement -->
+<button id="btnShowLeaderboard" class="btn" style="background:transparent; color:var(--muted); width:100%; margin-top:10px; font-size:14px; text-decoration: underline;">
+  Voir le classement
+</button>
 </section>
 
     <section class="card hidden" id="screen-quiz">
@@ -272,6 +279,16 @@ $("scoreMessage").textContent =
       renderQuestion();
     };
 
+    // Affiche le classement depuis l'accueil
+    $("btnShowLeaderboard").onclick = () => {
+      $("screen-start").classList.add("hidden");
+      $("screen-end").classList.remove("hidden");
+      // On cache la zone du score car le quiz n'est pas fini
+      document.querySelector(".final-score-container").classList.add("hidden");
+      // Le bouton rejouer devient un bouton retour
+      $("btnRestart").textContent = "Retour au menu";
+    };
+
     $("btnRight").onclick = () => {
       const item = BLOCKS[blockIndex].items[levelIndex];
       history.push({b: blockIndex, l: levelIndex, s: score});
@@ -294,6 +311,41 @@ $("scoreMessage").textContent =
     };
 
     $("btnRestart").onclick = () => location.reload();
+
+    function finishQuiz() {
+      // On réaffiche le conteneur du score (au cas où il était caché via l'accueil)
+      document.querySelector(".final-score-container").classList.remove("hidden");
+      $("finalScore").textContent = score;
+      
+      // Tes messages personnalisés
+      $("scoreMessage").textContent = 
+          score > 80 ? "BIG LEAGUES 🏆" : 
+          score > 60 ? "Pas mal !! 🔥" : 
+          score > 40 ? "Pas mal 👍" : 
+          score > 20 ? "Peut mieux faire ! 🤨" : 
+          "NABILLA TIER 📞";
+      
+      $("screen-quiz").classList.add("hidden");
+      $("screen-end").classList.remove("hidden");
+      
+      // Envoi ou affichage du classement
+      renderLeaderboard([{name: playerName, score: score, date: new Date()}]);
+    }
+
+    function renderLeaderboard(entries) {
+      const list = $("leaderboard");
+      list.innerHTML = "";
+      entries.forEach((e) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div style="display:flex; justify-content:space-between; font-weight:700;">
+            <span>👤 ${e.name}</span>
+            <span>${e.score} pts</span>
+          </div>
+        `;
+        list.appendChild(li);
+      });
+    }
   </script>
 </body>
 </html>
