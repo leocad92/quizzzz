@@ -203,6 +203,9 @@
   </main>
 
   <script>
+    // URL DE TON SCRIPT GOOGLE APPS[cite: 1]
+    const GOOGLE_SCRIPT_URL = "TON_LIEN_SCRIPT_GOOGLE_ICI";
+
     const BLOCKS = [
       { id: 1, items: [
         { level: 0, label: "1)", points: 1, text: "Comment s'appelle la plus grand Pyramide d'Egypte ?" },
@@ -236,13 +239,10 @@
       const list = $("leaderboard");
       list.innerHTML = "";
       
-      // Trier par score décroissant
       entries.sort((a, b) => b.score - a.score);
 
       entries.forEach((e, i) => {
         const li = document.createElement("li");
-        
-        // Système de médailles[cite: 2]
         let medal = "👤";
         if (i === 0) medal = "🥇";
         else if (i === 1) medal = "🥈";
@@ -272,8 +272,15 @@
       
       $("screen-quiz").classList.add("hidden");
       $("screen-end").classList.remove("hidden");
+
+      // ENVOI VERS GOOGLE SHEETS[cite: 1]
+      if (GOOGLE_SCRIPT_URL !== "TON_LIEN_SCRIPT_GOOGLE_ICI") {
+          fetch(`${GOOGLE_SCRIPT_URL}?name=${encodeURIComponent(playerName)}&score=${score}`, {
+            method: 'GET',
+            mode: 'no-cors'
+          });
+      }
       
-      // On montre les points à la fin[cite: 2]
       renderLeaderboard([{name: playerName, score: score}], true);
     }
 
@@ -290,8 +297,8 @@
       document.querySelector(".final-score-container").classList.add("hidden");
       $("btnRestart").textContent = "Retour au menu";
       
-      // On masque les points sur l'accueil[cite: 2]
-      const mockData = [{name: "Léo", score: 100}, {name: "Inconnu", score: 80}];
+      // Données exemple pour l'accueil[cite: 1]
+      const mockData = [{name: "Léo", score: 100}, {name: "Thomas", score: 80}];
       renderLeaderboard(mockData, false);
     };
 
