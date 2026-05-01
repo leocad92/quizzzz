@@ -193,10 +193,13 @@
         <ol id="leaderboard" class="leaderboard"></ol>
       </div>
 
+      <button id="btnRestart" class="btn primary" style="width:100%">Rejouer</button>
+    </section>
+  </main>
 
   <script>
     // COLLE TON URL ICI[cite: 1]
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGBrUA4gstDJzYedmpjHgVF5EY3cHhJFi9xOda_us8a5C5MlRgGS_N6RY-xrZL-idX4w/exec";
+    const GOOGLE_SCRIPT_URL = "TON_NOUVEL_URL_ICI";
 
     const BLOCKS = [
       { id: 1, items: [
@@ -247,26 +250,27 @@
       } catch(e) { console.log("Erreur envoi"); }
       
       // Rafraîchir le classement[cite: 1]
-   async function loadLiveLeaderboard(showPoints) {
-  $("leaderboard").innerHTML = "<li style='text-align:center'>Chargement des champions...</li>";
-  
-  try {
-    // On ajoute un paramètre 't' avec l'heure actuelle pour éviter le cache
-    const antiCacheUrl = GOOGLE_SCRIPT_URL + "?t=" + new Date().getTime();
-    
-    const res = await fetch(antiCacheUrl);
-    
-    if (!res.ok) throw new Error("Erreur réseau");
-    
-    const data = await res.json();
-    renderLeaderboard(data, showPoints);
-  } catch(e) {
-    console.error("Erreur de chargement :", e);
-    // En cas d'erreur, on affiche une liste vide proprement
-    renderLeaderboard([], showPoints);
-    $("leaderboard").innerHTML += "<li style='text-align:center; font-size:10px; color:var(--danger)'>Erreur de connexion au serveur</li>";
-  }
-}
+      loadLiveLeaderboard(true);
+    }
+
+    async function loadLiveLeaderboard(showPoints) {
+      $("leaderboard").innerHTML = "<li style='text-align:center'>Chargement...</li>";
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL);
+        const data = await res.json();
+        renderLeaderboard(data, showPoints);
+      } catch(e) {
+        renderLeaderboard([], showPoints);
+      }
+    }
+
+    $("btnShowLeaderboard").onclick = () => {
+      $("screen-start").classList.add("hidden");
+      $("screen-end").classList.remove("hidden");
+      document.querySelector(".final-score-container").classList.add("hidden");
+      $("btnRestart").textContent = "Retour au menu";
+      loadLiveLeaderboard(false);
+    };
 
     $("btnStart").onclick = () => {
       playerName = $("nameInput").value || "Anonyme";
