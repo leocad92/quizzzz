@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quizz culture G (version Léo)</title>
+  <title>Quizz Culture G - 100 Points Max</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,146 +18,40 @@
       --danger: #ef4444;
       --radius: 24px;
     }
-
     * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
-    
     body {
       font-family: 'Montserrat', sans-serif;
       background: var(--bg-gradient);
       background-attachment: fixed;
       color: var(--text);
-      line-height: 1.6;
       display: flex;
       justify-content: center;
+      margin: 0;
     }
-
-    .app {
-      width: 100%;
-      max-width: 700px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .brand {
-      font-weight: 900;
-      font-size: 32px;
-      text-align: center;
-      background: linear-gradient(to right, #38bdf8, #818cf8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -1px;
-      margin: 20px 0;
-      text-transform: uppercase;
-    }
-
-    .card {
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 32px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .final-score-container {
-      text-align: center;
-      padding: 20px 0;
-    }
-    
-    .big-score-label {
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      color: var(--primary);
-      font-weight: 700;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .big-score-value {
-      font-size: 82px;
-      font-weight: 900;
-      line-height: 1;
-      background: linear-gradient(to bottom, #fff, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    #scoreMessage {
-      font-size: 24px;
-      font-weight: 800;
-      margin-top: 10px;
-      display: block;
-      color: var(--success);
-    }
-
+    .app { width: 100%; max-width: 700px; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+    .brand { font-weight: 900; font-size: 32px; text-align: center; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 20px 0; text-transform: uppercase; }
+    .card { background: var(--card); backdrop-filter: blur(12px); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .final-score-container { text-align: center; padding: 20px 0; }
+    .big-score-value { font-size: 82px; font-weight: 900; line-height: 1; background: linear-gradient(to bottom, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .hidden { display: none !important; }
-
-    .input {
-      width: 100%;
-      padding: 16px;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.05);
-      color: #fff;
-      font-family: inherit;
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .btn {
-      padding: 16px 24px;
-      border-radius: 14px;
-      font-weight: 800;
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .btn.primary { background: var(--primary); color: #0f172a; box-shadow: 0 4px 15px var(--primary-glow); }
-    .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--primary-glow); }
+    .input { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: #fff; font-size: 16px; margin-bottom: 20px; }
+    .btn { padding: 16px 24px; border-radius: 14px; font-weight: 800; cursor: pointer; border: none; transition: all 0.2s; text-transform: uppercase; }
+    .btn.primary { background: var(--primary); color: #0f172a; }
     .btn.success { background: var(--success); color: #fff; }
     .btn.danger { background: var(--danger); color: #fff; }
-
     .leaderboard { list-style: none; padding: 0; }
-    .leaderboard li {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 10px;
-    }
-    
-    .pill {
-      background: rgba(255,255,255,0.1);
-      padding: 6px 12px;
-      border-radius: 99px;
-      font-size: 12px;
-      font-weight: 700;
-    }
+    .leaderboard li { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; margin-bottom: 10px; }
+    .pill { background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; }
   </style>
 </head>
 <body>
   <main class="app">
-    <div class="brand">QuizZ Culture G (version Léo)</div>
+    <div class="brand">QuizZ Culture G</div>
 
     <section class="card" id="screen-start" style="text-align: center;">
-      <div style="margin-bottom: 30px;">
-        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 15px;">Règles :</h2>
-        <p style="margin: 5px 0; font-weight: 500;">Il y a 20 blocs</p>
-        <p style="margin: 5px 0; font-weight: 500;">Si c’est bon, tu débloques la sous-question suivante (tiroir)</p>
-        <p style="margin: 5px 0; font-weight: 500;">Si c’est faux, on passe au bloc suivant</p>
-        <p style="margin: 15px 0; font-weight: 500;">Il y a aussi des questions à choix multiples</p>
-        <h3 style="font-weight: 700; font-size: 24px; margin-top: 20px;">Prêt ?</h3>
-      </div>
-
-      <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
+      <h2 style="text-transform: uppercase;">Prêt pour le défi ?</h2>
+      <p>13 thèmes • Système de tiroirs • 100 points max</p>
+      <input id="nameInput" class="input" placeholder="Votre prénom / Nom d'équipe..." maxlength="20" />
       <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
     </section>
 
@@ -169,7 +63,6 @@
       <div id="kicker" class="muted" style="font-size:12px; font-weight:700; text-transform:uppercase; margin-bottom:10px"></div>
       <h2 id="questionText" style="font-size:24px; margin-top:0"></h2>
       <div id="questionPoints" style="color:var(--primary); font-weight:700"></div>
-      
       <div style="display:flex; gap:12px; margin-top:30px;">
         <button id="btnWrong" class="btn danger" style="flex:1">Faux</button>
         <button id="btnRight" class="btn success" style="flex:1">Bon</button>
@@ -179,13 +72,12 @@
 
     <section class="card hidden" id="screen-end">
       <div class="final-score-container">
-        <span class="big-score-label">Ton Score Final</span>
+        <span style="text-transform:uppercase; font-size:14px; letter-spacing:2px;">Score Final</span>
         <div class="big-score-value" id="finalScore">0</div>
-        <span id="scoreMessage"></span>
+        <span id="scoreMessage" style="font-size:24px; font-weight:800; color:var(--success);"></span>
       </div>
-      
-      <div style="margin: 30px 0;">
-        <h3 style="text-align:center; text-transform:uppercase; font-size:14px; letter-spacing:2px">CLASSEMENT</h3>
+      <div style="margin-top: 30px;">
+        <h3 style="text-align:center; text-transform:uppercase; font-size:14px;">Classement Live</h3>
         <ol id="leaderboard" class="leaderboard"></ol>
       </div>
     </section>
@@ -195,66 +87,111 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGBrUA4gstDJzYedmpjHgVF5EY3cHhJFi9xOda_us8a5C5MlRgGS_N6RY-xrZL-idX4w/exec";
 
     const BLOCKS = [
-      { id: 1, items: [
-        { level: 0, label: "1)", points: 1, text: "Comment s'appelle la plus grand Pyramide d'Egypte ?" },
-        { level: 1, label: "a)", points: 3, text: "À cinq cents ans près, en quelle année fut elle construite ?" },
-        { level: 2, label: "i.", points: 4, text: "Quelles sont les 6 autres merveilles antiques ?" },
-        { level: 3, label: "–", points: 5, text: "Quel pharaon a construit la seconde plus grande pyramide d'Egypte ?" },
+      { id: 1, name: "Histoire de France", items: [
+        { level: 0, label: "1)", points: 1, text: "Quel président français a été réélu en 2002 face à J-M Le Pen ?" },
+        { level: 1, label: "a)", points: 2, text: "Quel roi était surnommé le 'Roi-Soleil' ?" },
+        { level: 2, label: "i.", points: 2, text: "Qui est considéré comme le premier Roi des Francs (Mérovingiens) ?" },
+        { level: 3, label: "–", points: 3, text: "Qui a été le tout premier Président de la République en 1848 ?" }
       ]},
-      { id: 2, items: [
-        { level: 0, label: "2)", points: 2, text: "Comment s'appelle le personnage principal de la série Breaking Bad ?" },
-        { level: 1, label: "a)", points: 2, text: "Quel est son surnom dans la série ?" },
-        { level: 2, label: "i.", points: 4, text: "Ce surnom est le nom d'un célèbre physicien, à quel siècle a-t-il vécu ?" },
-        { level: 3, label: "–", points: 5, text: "Dans quel domaine de la physique a-t-il fait ses principaux travaux ?" },
+      { id: 2, name: "Football", items: [
+        { level: 0, label: "2)", points: 1, text: "Quel joueur de légende est surnommé 'CR7' ?" },
+        { level: 1, label: "a)", points: 2, text: "Dans quel club anglais a-t-il explosé au début de sa carrière ?" },
+        { level: 2, label: "i.", points: 2, text: "Combien de titres de champion d'Angleterre possède Man United ?" },
+        { level: 3, label: "–", points: 3, text: "Expert : Quel joueur de champ non-britannique a le record d'apparitions en PL ?" }
       ]},
+      { id: 3, name: "Combat & Tennis", items: [
+        { level: 0, label: "3)", points: 1, text: "Que signifie littéralement le mot 'Judo' ?" },
+        { level: 1, label: "a)", points: 2, text: "Quel boxeur a battu Mohammed Ali en 1971 (Fight of the Century) ?" },
+        { level: 2, label: "i.", points: 2, text: "Seule joueuse à avoir fait le Golden Slam (4 GC + JO) en 1988 ?" },
+        { level: 3, label: "–", points: 3, text: "Expert : Citez 3 joueuses de l'Équipe de France féminine (nommées par le joueur)." }
+      ]},
+      { id: 4, name: "Musique Classique & Pop", items: [
+        { level: 0, label: "4)", points: 1, text: "De quel pays est originaire le groupe ABBA ?" },
+        { level: 1, label: "a)", points: 2, text: "Compositeur autrichien mort à 35 ans (600 œuvres) ?" },
+        { level: 2, label: "i.", points: 2, text: "Quel est l'album le plus vendu de tous les temps ?" },
+        { level: 3, label: "–", points: 2, text: "Festival anglais créé en 1970, l'un des plus grands au monde ?" }
+      ]},
+      { id: 5, name: "Jazz & Techno", items: [
+        { level: 0, label: "5)", points: 1, text: "Dans quelle ville américaine le Jazz est-il né ?" },
+        { level: 1, label: "a)", points: 2, text: "Trompettiste auteur de l'album 'Kind of Blue' ?" },
+        { level: 2, label: "i.", points: 2, text: "Nom de la boîte techno de Berlin à la sélection très stricte ?" },
+        { level: 3, label: "–", points: 2, text: "QCM : Lequel n'est pas à Berlin ? A) Tresor B) Fabric C) Watergate" }
+      ]},
+      { id: 6, name: "Géographie", items: [
+        { level: 0, label: "6)", points: 1, text: "Quel est le plus grand océan du monde ?" },
+        { level: 1, label: "a)", points: 2, text: "Quel est le plus grand désert du monde (incluant les zones froides) ?" },
+        { level: 2, label: "i.", points: 2, text: "Quel est le deuxième sommet le plus haut après l'Everest ?" },
+        { level: 3, label: "–", points: 3, text: "Quelle est la capitale actuelle du Kazakhstan ?" }
+      ]},
+      { id: 7, name: "Auto & James Bond", items: [
+        { level: 0, label: "7)", points: 1, text: "Constructeur de la DB5 de James Bond ?" },
+        { level: 1, label: "a)", points: 2, text: "De quel pays vient la marque Bugatti ?" },
+        { level: 2, label: "i.", points: 2, text: "Groupe mondial possédant Peugeot, Fiat, Jeep et Opel ?" },
+        { level: 3, label: "–", points: 3, text: "Expert : Citez 4 acteurs ayant joué James Bond." }
+      ]},
+      { id: 8, name: "Seconde Guerre Mondiale", items: [
+        { level: 0, label: "8)", points: 1, text: "Titre du livre d'Hitler écrit en 1924 ?" },
+        { level: 1, label: "a)", points: 2, text: "En quelle année Hitler arrive-t-il au pouvoir ?" },
+        { level: 2, label: "i.", points: 2, text: "Nom de la bombe atomique d'Hiroshima ?" },
+        { level: 3, label: "–", points: 3, text: "Nom de la seconde bombe larguée sur Nagasaki ?" }
+      ]},
+      { id: 9, name: "Gastronomie", items: [
+        { level: 0, label: "9)", points: 1, text: "Ingrédient de base d'une omelette ?" },
+        { level: 1, label: "a)", points: 2, text: "Fromage italien produit exclusivement autour de Parme ?" },
+        { level: 2, label: "i.", points: 2, text: "Action de plonger un légume dans l'eau bouillante puis glacée ?" },
+        { level: 3, label: "–", points: 3, text: "Père de la cuisine moderne et de sa codification ?" }
+      ]},
+      { id: 10, name: "Tech & Cinéma", items: [
+        { level: 0, label: "10)", points: 1, text: "Nom du créateur de Facebook ?" },
+        { level: 1, label: "a)", points: 2, text: "Biopic oscarisé sur la création de Facebook ?" },
+        { level: 2, label: "i.", points: 2, text: "Nouveau nom de Twitter ?" },
+        { level: 3, label: "–", points: 3, text: "Acteur seul détenteur de 3 Oscars du meilleur acteur ?" }
+      ]},
+      { id: 11, name: "Art & Peinture", items: [
+        { level: 0, label: "11)", points: 1, text: "Peintre fondateur de l'Impressionnisme ?" },
+        { level: 1, label: "a)", points: 2, text: "Tableau de Delacroix montrant une femme avec le drapeau ?" },
+        { level: 2, label: "i.", points: 3, text: "Artiste espagnol co-fondateur du Cubisme ?" },
+        { level: 3, label: "–", points: 3, text: "Musée où l'on trouve la Vénus de Milo ?" }
+      ]},
+      { id: 12, name: "Rois & Révolution", items: [
+        { level: 0, label: "12)", points: 1, text: "Roi guillotiné en 1793 ?" },
+        { level: 1, label: "a)", points: 2, text: "Surnom de Louis-Philippe Ier (monté en 1830) ?" },
+        { level: 2, label: "i.", points: 3, text: "Dernier monarque 'Roi des Français' ?" },
+        { level: 3, label: "–", points: 3, text: "Année de la chute de l'Empire de Napoléon III ?" }
+      ]},
+      { id: 13, name: "Espace", items: [
+        { level: 0, label: "13)", points: 1, text: "Planète la plus proche du Soleil ?" },
+        { level: 1, label: "a)", points: 2, text: "Planète aux anneaux les plus visibles ?" },
+        { level: 2, label: "i.", points: 2, text: "Nom de notre galaxie ?" },
+        { level: 3, label: "–", points: 2, text: "QCM : Quelle est la planète bleue ? A) Mars B) Terre C) Neptune" }
+      ]}
     ];
 
     let playerName = "", score = 0, blockIndex = 0, levelIndex = 0, history = [];
     const $ = (id) => document.getElementById(id);
 
-    function renderLeaderboard(entries, showPoints = true) {
-      const list = $("leaderboard");
-      list.innerHTML = "";
-      if (entries.length === 0) {
-        list.innerHTML = "<li style='text-align:center'>Aucun score enregistré</li>";
-        return;
-      }
-      entries.forEach((e, i) => {
-        const li = document.createElement("li");
-        let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "👤";
-        li.innerHTML = `
-          <div style="display:flex; justify-content:space-between; font-weight:700;">
-            <span>${medal} ${e.name}</span>
-            <span>${showPoints ? e.score + ' pts' : 'Score masqué 🔒'}</span>
-          </div>`;
-        list.appendChild(li);
-      });
-    }
-
     async function finishQuiz() {
       $("screen-quiz").classList.add("hidden");
       $("screen-end").classList.remove("hidden");
       $("finalScore").textContent = score;
-      $("scoreMessage").textContent = score > 80 ? "BIG LEAGUES 🏆" : score > 40 ? "Pas mal 👍" : "NABILLA TIER 📞";
-      
+      $("scoreMessage").textContent = score > 85 ? "LÉGENDE 🏆" : score > 50 ? "BIEN JOUÉ 👍" : "NABILLA TIER 📞";
       try {
-        // Envoi du score à Google Sheets
         await fetch(`${GOOGLE_SCRIPT_URL}?name=${encodeURIComponent(playerName)}&score=${score}`, { mode: 'no-cors' });
-      } catch(e) { console.log("Erreur envoi"); }
-      
-      // Chargement du classement mis à jour
-      loadLiveLeaderboard(true);
+      } catch(e) {}
+      loadLiveLeaderboard();
     }
 
-    async function loadLiveLeaderboard(showPoints) {
-      $("leaderboard").innerHTML = "<li style='text-align:center'>Chargement...</li>";
+    async function loadLiveLeaderboard() {
+      $("leaderboard").innerHTML = "<li>Chargement...</li>";
       try {
-        const res = await fetch(GOOGLE_SCRIPT_URL + "?t=" + new Date().getTime());
+        const res = await fetch(GOOGLE_SCRIPT_URL + "?t=" + Date.now());
         const data = await res.json();
-        renderLeaderboard(data, showPoints);
-      } catch(e) {
-        renderLeaderboard([], showPoints);
-      }
+        $("leaderboard").innerHTML = data.map((e, i) => `
+          <li><div style="display:flex; justify-content:space-between;">
+            <span>${i<3 ? ['🥇','🥈','🥉'][i] : '👤'} ${e.name}</span>
+            <span>${e.score} pts</span>
+          </div></li>`).join('') || "<li>Aucun score</li>";
+      } catch(e) { $("leaderboard").innerHTML = "<li>Erreur</li>"; }
     }
 
     $("btnStart").onclick = () => {
@@ -283,11 +220,12 @@
     };
 
     function renderQuestion() {
-      const item = BLOCKS[blockIndex].items[levelIndex];
+      const block = BLOCKS[blockIndex];
+      const item = block.items[levelIndex];
       $("questionText").textContent = item.text;
       $("questionPoints").textContent = `+ ${item.points} points`;
-      $("kicker").textContent = `Bloc ${blockIndex + 1} • Question ${item.label}`;
-      $("progress").textContent = `Etape ${blockIndex + 1}/${BLOCKS.length}`;
+      $("kicker").textContent = `${block.name} • Question ${item.label}`;
+      $("progress").textContent = `Thème ${blockIndex + 1}/${BLOCKS.length}`;
       $("score").textContent = `Score: ${score}`;
     }
   </script>
