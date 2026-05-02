@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quizz Culture G - 100 Points Max</title>
+  <title>Quizz culture G (version Léo)</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -46,12 +46,18 @@
 </head>
 <body>
   <main class="app">
-    <div class="brand">QuizZ Culture G</div>
+    <div class="brand">QuizZ Culture G (version Léo)</div>
 
     <section class="card" id="screen-start" style="text-align: center;">
-      <h2 style="text-transform: uppercase;">Prêt pour le défi ?</h2>
-      <p>13 thèmes • Système de tiroirs • 100 points max</p>
-      <input id="nameInput" class="input" placeholder="Votre prénom / Nom d'équipe..." maxlength="20" />
+      <div style="margin-bottom: 30px;">
+        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 15px;">Règles :</h2>
+        <p style="margin: 5px 0; font-weight: 500;">Il y a 20 blocs</p>
+        <p style="margin: 5px 0; font-weight: 500;">Si c’est bon, tu débloques la sous-question suivante (tiroir)</p>
+        <p style="margin: 5px 0; font-weight: 500;">Si c’est faux, on passe au bloc suivant</p>
+        <p style="margin: 15px 0; font-weight: 500;">Il y a aussi des questions à choix multiples</p>
+        <h3 style="font-weight: 700; font-size: 24px; margin-top: 20px;">Prêt ?</h3>
+      </div>
+      <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
       <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
     </section>
 
@@ -72,12 +78,12 @@
 
     <section class="card hidden" id="screen-end">
       <div class="final-score-container">
-        <span style="text-transform:uppercase; font-size:14px; letter-spacing:2px;">Score Final</span>
+        <span style="text-transform:uppercase; font-size:14px; letter-spacing:2px;">Ton Score Final</span>
         <div class="big-score-value" id="finalScore">0</div>
         <span id="scoreMessage" style="font-size:24px; font-weight:800; color:var(--success);"></span>
       </div>
       <div style="margin-top: 30px;">
-        <h3 style="text-align:center; text-transform:uppercase; font-size:14px;">Classement Live</h3>
+        <h3 style="text-align:center; text-transform:uppercase; font-size:14px;">Classement</h3>
         <ol id="leaderboard" class="leaderboard"></ol>
       </div>
     </section>
