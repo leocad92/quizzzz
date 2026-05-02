@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quizz culture G (version Léo)</title>
+  <title>Quizz Culture G - Version 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -13,7 +13,6 @@
       --text: #f8fafc;
       --muted: #94a3b8;
       --primary: #38bdf8;
-      --primary-glow: rgba(56, 189, 248, 0.3);
       --success: #22c55e;
       --danger: #ef4444;
       --radius: 24px;
@@ -27,35 +26,30 @@
       display: flex;
       justify-content: center;
       margin: 0;
+      min-height: 100vh;
     }
     .app { width: 100%; max-width: 700px; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
     .brand { font-weight: 900; font-size: 32px; text-align: center; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 20px 0; text-transform: uppercase; }
     .card { background: var(--card); backdrop-filter: blur(12px); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-    .final-score-container { text-align: center; padding: 20px 0; }
-    .big-score-value { font-size: 82px; font-weight: 900; line-height: 1; background: linear-gradient(to bottom, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .hidden { display: none !important; }
-    .input { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: #fff; font-size: 16px; margin-bottom: 20px; }
+    .input { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: #fff; font-size: 16px; margin-bottom: 20px; outline: none; }
     .btn { padding: 16px 24px; border-radius: 14px; font-weight: 800; cursor: pointer; border: none; transition: all 0.2s; text-transform: uppercase; }
     .btn.primary { background: var(--primary); color: #0f172a; }
     .btn.success { background: var(--success); color: #fff; }
     .btn.danger { background: var(--danger); color: #fff; }
-    .leaderboard { list-style: none; padding: 0; }
-    .leaderboard li { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; margin-bottom: 10px; }
     .pill { background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+    .final-score-container { text-align: center; padding: 20px 0; }
+    .big-score-value { font-size: 82px; font-weight: 900; line-height: 1; background: linear-gradient(to bottom, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   </style>
 </head>
 <body>
   <main class="app">
-    <div class="brand">QuizZ Culture G (version Léo)</div>
+    <div class="brand">QuizZ Culture G</div>
 
     <section class="card" id="screen-start" style="text-align: center;">
       <div style="margin-bottom: 30px;">
-        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 15px;">Règles :</h2>
-        <p style="margin: 5px 0; font-weight: 500;">Il y a 20 blocs</p>
-        <p style="margin: 5px 0; font-weight: 500;">Si c’est bon, tu débloques la sous-question suivante (tiroir)</p>
-        <p style="margin: 5px 0; font-weight: 500;">Si c’est faux, on passe au bloc suivant</p>
-        <p style="margin: 15px 0; font-weight: 500;">Il y a aussi des questions à choix multiples</p>
-        <h3 style="font-weight: 700; font-size: 24px; margin-top: 20px;">Prêt ?</h3>
+        <h2 style="text-transform: uppercase;">Prêt pour le défi ?</h2>
+        <p>18 Blocs thématiques • Système de paliers</p>
       </div>
       <input id="nameInput" class="input" placeholder="Ton prénom..." maxlength="20" />
       <button id="btnStart" class="btn primary" style="width:100%">Lancer le Quiz</button>
@@ -64,11 +58,13 @@
     <section class="card hidden" id="screen-quiz">
       <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
         <span id="progress" class="pill"></span>
-        <span id="score" class="pill" style="color:var(--primary)"></span>
+        <span id="score" class="pill" style="color:var(--primary)">Score: 0</span>
       </div>
       <div id="kicker" class="muted" style="font-size:12px; font-weight:700; text-transform:uppercase; margin-bottom:10px"></div>
-      <h2 id="questionText" style="font-size:24px; margin-top:0"></h2>
+      <h2 id="questionText" style="font-size:22px; margin-top:0; min-height: 80px;"></h2>
+      <div id="answerText" class="hidden" style="color:var(--success); font-weight:700; margin-bottom:10px; border-left: 3px solid var(--success); padding-left:10px;"></div>
       <div id="questionPoints" style="color:var(--primary); font-weight:700"></div>
+      
       <div style="display:flex; gap:12px; margin-top:30px;">
         <button id="btnWrong" class="btn danger" style="flex:1">Faux</button>
         <button id="btnRight" class="btn success" style="flex:1">Bon</button>
@@ -78,160 +74,171 @@
 
     <section class="card hidden" id="screen-end">
       <div class="final-score-container">
-        <span style="text-transform:uppercase; font-size:14px; letter-spacing:2px;">Ton Score Final</span>
+        <span style="text-transform:uppercase; font-size:14px; letter-spacing:2px;">Score Final</span>
         <div class="big-score-value" id="finalScore">0</div>
-        <span id="scoreMessage" style="font-size:24px; font-weight:800; color:var(--success);"></span>
-      </div>
-      <div style="margin-top: 30px;">
-        <h3 style="text-align:center; text-transform:uppercase; font-size:14px;">Classement</h3>
-        <ol id="leaderboard" class="leaderboard"></ol>
+        <h2 id="scoreMessage" style="margin-top:20px;"></h2>
+        <button onclick="location.reload()" class="btn primary" style="margin-top:20px;">Recommencer</button>
       </div>
     </section>
   </main>
 
   <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGBrUA4gstDJzYedmpjHgVF5EY3cHhJFi9xOda_us8a5C5MlRgGS_N6RY-xrZL-idX4w/exec";
-
     const BLOCKS = [
-      { id: 1, name: "Histoire de France", items: [
-        { level: 0, label: "1)", points: 1, text: "Quel président français a été réélu en 2002 face à J-M Le Pen ?" },
-        { level: 1, label: "a)", points: 2, text: "Quel roi était surnommé le 'Roi-Soleil' ?" },
-        { level: 2, label: "i.", points: 2, text: "Qui est considéré comme le premier Roi des Francs (Mérovingiens) ?" },
-        { level: 3, label: "–", points: 3, text: "Qui a été le tout premier Président de la République en 1848 ?" }
+      { name: "Histoire de France", items: [
+        { text: "Quel est le surnom de Louis XIV ?", ans: "Le Roi Soleil", pts: 1 },
+        { text: "Qui est considéré comme le premier roi des Francs ?", ans: "Clovis", pts: 2 },
+        { text: "Qui est considéré comme le dernier roi des Français ?", ans: "Louis Philippe", pts: 2 },
+        { text: "Quelles sont les trois maisons prétendantes au trône de France ?", ans: "Orléans, Bourbon et Bonaparte", pts: 3 }
       ]},
-      { id: 2, name: "Football", items: [
-        { level: 0, label: "2)", points: 1, text: "Quel joueur de légende est surnommé 'CR7' ?" },
-        { level: 1, label: "a)", points: 2, text: "Dans quel club anglais a-t-il explosé au début de sa carrière ?" },
-        { level: 2, label: "i.", points: 2, text: "Combien de titres de champion d'Angleterre possède Man United ?" },
-        { level: 3, label: "–", points: 3, text: "Expert : Quel joueur de champ non-britannique a le record d'apparitions en PL ?" }
+      { name: "Histoire Ancienne", items: [
+        { text: "Dans quelle ville se trouvait la plus grande bibliothèque du monde antique ?", ans: "Alexandrie", pts: 1 },
+        { text: "Quel roi de Sparte a mené 300 soldats aux Thermopyles ?", ans: "Léonidas Ier", pts: 2 },
+        { text: "Les femmes pouvaient-elles participer aux JO antiques ?", ans: "Faux (Peine de mort si spectatrice)", pts: 2 },
+        { text: "Qui a déchiffré les hiéroglyphes égyptiens ?", ans: "Jean-François Champollion", pts: 3 }
       ]},
-      { id: 3, name: "Combat & Tennis", items: [
-        { level: 0, label: "3)", points: 1, text: "Que signifie littéralement le mot 'Judo' ?" },
-        { level: 1, label: "a)", points: 2, text: "Quel boxeur a battu Mohammed Ali en 1971 (Fight of the Century) ?" },
-        { level: 2, label: "i.", points: 2, text: "Seule joueuse à avoir fait le Golden Slam (4 GC + JO) en 1988 ?" },
-        { level: 3, label: "–", points: 3, text: "Expert : Citez 3 joueuses de l'Équipe de France féminine (nommées par le joueur)." }
+      { name: "Sports Football", items: [
+        { text: "Quel joueur est surnommé CR7 ?", ans: "Cristiano Ronaldo", pts: 1 },
+        { text: "Dans quel club anglais a-t-il joué ?", ans: "Manchester United", pts: 2 },
+        { text: "Citez 4 joueuses de football féminin", ans: "(Vérifier la réponse)", pts: 2 },
+        { text: "Quel joueur de champ non-britannique a le record d'apparitions en Premier League ?", ans: "Vérifier (ex: Fernandinho/Giggs est Gallois)", pts: 3 }
       ]},
-      { id: 4, name: "Musique Classique & Pop", items: [
-        { level: 0, label: "4)", points: 1, text: "De quel pays est originaire le groupe ABBA ?" },
-        { level: 1, label: "a)", points: 2, text: "Compositeur autrichien mort à 35 ans (600 œuvres) ?" },
-        { level: 2, label: "i.", points: 2, text: "Quel est l'album le plus vendu de tous les temps ?" },
-        { level: 3, label: "–", points: 2, text: "Festival anglais créé en 1970, l'un des plus grands au monde ?" }
+      { name: "Sports Divers", items: [
+        { text: "Dans quel sport (non auto) utilise-t-on un volant ?", ans: "Badminton", pts: 1 },
+        { text: "Qui a battu Mohammed Ali pour la première fois en 1971 ?", ans: "Joe Frazier", pts: 2 },
+        { text: "Que signifie le mot judo ?", ans: "Voie de la souplesse", pts: 2 },
+        { text: "Qui est la seule joueuse à avoir réalisé le 'Golden Slam' en 1988 ?", ans: "Steffi Graf", pts: 3 }
       ]},
-      { id: 5, name: "Jazz & Techno", items: [
-        { level: 0, label: "5)", points: 1, text: "Dans quelle ville américaine le Jazz est-il né ?" },
-        { level: 1, label: "a)", points: 2, text: "Trompettiste auteur de l'album 'Kind of Blue' ?" },
-        { level: 2, label: "i.", points: 2, text: "Nom de la boîte techno de Berlin à la sélection très stricte ?" },
-        { level: 3, label: "–", points: 2, text: "QCM : Lequel n'est pas à Berlin ? A) Tresor B) Fabric C) Watergate" }
+      { name: "Musique", items: [
+        { text: "Compositeur autrichien mort à 35 ans (600 œuvres) ?", ans: "Mozart", pts: 1 },
+        { text: "Quel est l'album le plus vendu de tous les temps ?", ans: "Thriller (Michael Jackson)", pts: 2 },
+        { text: "De quel pays vient le groupe ABBA ?", ans: "Suède", pts: 2 },
+        { text: "Musicien à l'origine de Blur et Gorillaz ?", ans: "Damon Albarn", pts: 3 }
       ]},
-      { id: 6, name: "Géographie", items: [
-        { level: 0, label: "6)", points: 1, text: "Quel est le plus grand océan du monde ?" },
-        { level: 1, label: "a)", points: 2, text: "Quel est le plus grand désert du monde (incluant les zones froides) ?" },
-        { level: 2, label: "i.", points: 2, text: "Quel est le deuxième sommet le plus haut après l'Everest ?" },
-        { level: 3, label: "–", points: 3, text: "Quelle est la capitale actuelle du Kazakhstan ?" }
+      { name: "Automobile", items: [
+        { text: "De quel pays est originaire la marque de luxe Bugatti ?", ans: "France (Molsheim)", pts: 1 },
+        { text: "Groupe mondial possédant Peugeot, Citroën, Fiat et Jeep ?", ans: "Stellantis", pts: 2 },
+        { text: "Quelle est la voiture iconique de James Bond ?", ans: "Aston Martin DB5", pts: 2 },
+        { text: "Citez 3 acteurs de James Bond", ans: "(ex: Connery, Craig, Brosnan...)", pts: 3 }
       ]},
-      { id: 7, name: "Auto & James Bond", items: [
-        { level: 0, label: "7)", points: 1, text: "Constructeur de la DB5 de James Bond ?" },
-        { level: 1, label: "a)", points: 2, text: "De quel pays vient la marque Bugatti ?" },
-        { level: 2, label: "i.", points: 2, text: "Groupe mondial possédant Peugeot, Fiat, Jeep et Opel ?" },
-        { level: 3, label: "–", points: 3, text: "Expert : Citez 4 acteurs ayant joué James Bond." }
+      { name: "Gastronomie", items: [
+        { text: "Fromage italien protégé produit autour de Parme ?", ans: "Le Parmigiano Reggiano", pts: 1 },
+        { text: "QCM : Quelle est l'épice la plus chère au monde ? (Vanille / Safran / Poivre / Muscade)", ans: "Le Safran", pts: 2 },
+        { text: "Quel chef a été le premier à codifier la cuisine raffinée ?", ans: "Auguste Escoffier", pts: 2 },
+        { text: "Qu'est-ce que 'blanchir' un légume ?", ans: "Eau bouillante puis glacée", pts: 3 }
       ]},
-      { id: 8, name: "Seconde Guerre Mondiale", items: [
-        { level: 0, label: "8)", points: 1, text: "Titre du livre d'Hitler écrit en 1924 ?" },
-        { level: 1, label: "a)", points: 2, text: "En quelle année Hitler arrive-t-il au pouvoir ?" },
-        { level: 2, label: "i.", points: 2, text: "Nom de la bombe atomique d'Hiroshima ?" },
-        { level: 3, label: "–", points: 3, text: "Nom de la seconde bombe larguée sur Nagasaki ?" }
+      { name: "Géographie I", items: [
+        { text: "Quel est le plus grand océan du monde ?", ans: "Océan Pacifique", pts: 1 },
+        { text: "Quel est le plus grand désert (chaud ou froid) du monde ?", ans: "Désert Antarctique", pts: 2 },
+        { text: "Quelle est la capitale du Kazakhstan ?", ans: "Astana", pts: 2 },
+        { text: "Quel est le deuxième sommet du monde après l'Everest ?", ans: "Le K2", pts: 3 }
       ]},
-      { id: 9, name: "Gastronomie", items: [
-        { level: 0, label: "9)", points: 1, text: "Ingrédient de base d'une omelette ?" },
-        { level: 1, label: "a)", points: 2, text: "Fromage italien produit exclusivement autour de Parme ?" },
-        { level: 2, label: "i.", points: 2, text: "Action de plonger un légume dans l'eau bouillante puis glacée ?" },
-        { level: 3, label: "–", points: 3, text: "Père de la cuisine moderne et de sa codification ?" }
+      { name: "Géographie II", items: [
+        { text: "Quel fleuve traverse la ville de Londres ?", ans: "La Tamise", pts: 1 },
+        { text: "Quel pays est le plus grand : Algérie, Congo, Soudan ou Libye ?", ans: "L'Algérie", pts: 2 },
+        { text: "Quel est le plus long : le Nil ou l'Amazone ?", ans: "Le Nil", pts: 2 },
+        { text: "Quel est le diamètre de la Terre (à 1000km près) ?", ans: "12 742 km", pts: 3 }
       ]},
-      { id: 10, name: "Tech & Cinéma", items: [
-        { level: 0, label: "10)", points: 1, text: "Nom du créateur de Facebook ?" },
-        { level: 1, label: "a)", points: 2, text: "Biopic oscarisé sur la création de Facebook ?" },
-        { level: 2, label: "i.", points: 2, text: "Nouveau nom de Twitter ?" },
-        { level: 3, label: "–", points: 3, text: "Acteur seul détenteur de 3 Oscars du meilleur acteur ?" }
+      { name: "Histoire (Nazi)", items: [
+        { text: "Titre du livre écrit par Hitler en prison en 1924 ?", ans: "Mein Kampf", pts: 1 },
+        { text: "Bataille de 42-43 considérée comme le tournant à l'Est ?", ans: "Stalingrad", pts: 2 },
+        { text: "Nombre total de victimes du régime nazi (au million près) ?", ans: "11 millions", pts: 2 },
+        { text: "Noms des deux bombes atomiques de 1945 ?", ans: "Little Boy & Fat Man", pts: 3 }
       ]},
-      { id: 11, name: "Art & Peinture", items: [
-        { level: 0, label: "11)", points: 1, text: "Peintre fondateur de l'Impressionnisme ?" },
-        { level: 1, label: "a)", points: 2, text: "Tableau de Delacroix montrant une femme avec le drapeau ?" },
-        { level: 2, label: "i.", points: 3, text: "Artiste espagnol co-fondateur du Cubisme ?" },
-        { level: 3, label: "–", points: 3, text: "Musée où l'on trouve la Vénus de Milo ?" }
+      { name: "Économie", items: [
+        { text: "Que signifie PIB ?", ans: "Produit Intérieur Brut", pts: 1 },
+        { text: "Quelle organisation gère l'euro ?", ans: "Banque Centrale Européenne", pts: 2 },
+        { text: "Quel indicateur mesure les inégalités dans un pays ?", ans: "Coefficient de Gini", pts: 2 },
+        { text: "Qui a théorisé la 'destruction créatrice' ?", ans: "Joseph Schumpeter", pts: 3 }
       ]},
-      { id: 12, name: "Rois & Révolution", items: [
-        { level: 0, label: "12)", points: 1, text: "Roi guillotiné en 1793 ?" },
-        { level: 1, label: "a)", points: 2, text: "Surnom de Louis-Philippe Ier (monté en 1830) ?" },
-        { level: 2, label: "i.", points: 3, text: "Dernier monarque 'Roi des Français' ?" },
-        { level: 3, label: "–", points: 3, text: "Année de la chute de l'Empire de Napoléon III ?" }
+      { name: "Divers I", items: [
+        { text: "Nom du créateur de Facebook ?", ans: "Mark Zuckerberg", pts: 1 },
+        { text: "Film oscarisé biopic de Facebook ?", ans: "The Social Network", pts: 2 },
+        { text: "Acteur possédant le plus d'Oscars du meilleur acteur ?", ans: "Daniel Day-Lewis", pts: 2 },
+        { text: "Actrice possédant le plus de César de la meilleure actrice ?", ans: "Isabelle Adjani", pts: 3 }
       ]},
-      { id: 13, name: "Espace", items: [
-        { level: 0, label: "13)", points: 1, text: "Planète la plus proche du Soleil ?" },
-        { level: 1, label: "a)", points: 2, text: "Planète aux anneaux les plus visibles ?" },
-        { level: 2, label: "i.", points: 2, text: "Nom de notre galaxie ?" },
-        { level: 3, label: "–", points: 2, text: "QCM : Quelle est la planète bleue ? A) Mars B) Terre C) Neptune" }
+      { name: "Divers II (Littérature)", items: [
+        { text: "Qui a écrit 'Madame Bovary' en 1857 ?", ans: "Gustave Flaubert", pts: 1 },
+        { text: "Philosophe connu pour sa philosophie de l'absurde ?", ans: "Albert Camus", pts: 2 },
+        { text: "Citez 3 œuvres du cycle de l'absurde", ans: "L'étranger / Mythe de Sisyphe / Caligula", pts: 3 }
+      ]},
+      { name: "Divers III (Asie)", items: [
+        { text: "Quels sont les 3 pays les plus peuplés au monde ?", ans: "Inde / Chine / USA", pts: 1 },
+        { text: "Citez 4 villes en Chine", ans: "(ex: Pékin, Shanghai, Canton, Shenzhen...)", pts: 2 },
+        { text: "Dirigeant nationaliste chinois rival de Mao ?", ans: "Tchang Kaï-chek", pts: 2 },
+        { text: "Nom de la grande fonderie de semiconducteurs à Taïwan ?", ans: "TSMC", pts: 3 }
+      ]},
+      { name: "Grandes Femmes", items: [
+        { text: "Militante qui a refusé de céder sa place dans un bus ?", ans: "Rosa Parks", pts: 1 },
+        { text: "Loi adoptée par Simone Veil en 1975 ?", ans: "IVG", pts: 2 },
+        { text: "Auteur de la Déclaration des droits de la Femme (18ème) ?", ans: "Olympe de Gouges", pts: 2 },
+        { text: "Prix Nobel de la paix birman (1991) ?", ans: "Aung San Suu Kyi", pts: 3 }
+      ]},
+      { name: "Arts Divers", items: [
+        { text: "Qui est l'auteur des Misérables ?", ans: "Victor Hugo", pts: 1 },
+        { text: "Citez 2 personnages de l'œuvre", ans: "(ex: Jean Valjean, Cosette, Gavroche...)", pts: 2 },
+        { text: "Qui a peint 'La Liberté guidant le peuple' ?", ans: "Eugène Delacroix", pts: 2 }
+      ]},
+      { name: "Divers IV", items: [
+        { text: "Dans quel pays se situe le Taj Mahal ?", ans: "Inde", pts: 1 },
+        { text: "Plus grande cathédrale de France (volume) ?", ans: "Amiens", pts: 2 },
+        { text: "Surnom de la ville d'Amiens ?", ans: "Venise du Nord", pts: 2 },
+        { text: "Explorateur célèbre originaire de Venise ?", ans: "Marco Polo", pts: 3 }
+      ]},
+      { name: "Sciences & Histoire", items: [
+        { text: "Formule chimique de l'eau ?", ans: "H2O", pts: 1 },
+        { text: "Mathématicien ayant décrypté Enigma ?", ans: "Alan Turing", pts: 2 },
+        { text: "Quel personnage de Harry Potter porte le même prénom ?", ans: "Severus Rogue (Alan Rickman)", pts: 2 },
+        { text: "Quelle guerre (1756-1763) est la 'vraie' première guerre mondiale ?", ans: "Guerre de Sept Ans", pts: 3 }
       ]}
     ];
 
-    let playerName = "", score = 0, blockIndex = 0, levelIndex = 0, history = [];
+    let score = 0, bIdx = 0, lIdx = 0, history = [];
     const $ = (id) => document.getElementById(id);
 
-    async function finishQuiz() {
-      $("screen-quiz").classList.add("hidden");
-      $("screen-end").classList.remove("hidden");
-      $("finalScore").textContent = score;
-      $("scoreMessage").textContent = score > 85 ? "LÉGENDE 🏆" : score > 50 ? "BIEN JOUÉ 👍" : "NABILLA TIER 📞";
-      try {
-        await fetch(`${GOOGLE_SCRIPT_URL}?name=${encodeURIComponent(playerName)}&score=${score}`, { mode: 'no-cors' });
-      } catch(e) {}
-      loadLiveLeaderboard();
-    }
-
-    async function loadLiveLeaderboard() {
-      $("leaderboard").innerHTML = "<li>Chargement...</li>";
-      try {
-        const res = await fetch(GOOGLE_SCRIPT_URL + "?t=" + Date.now());
-        const data = await res.json();
-        $("leaderboard").innerHTML = data.map((e, i) => `
-          <li><div style="display:flex; justify-content:space-between;">
-            <span>${i<3 ? ['🥇','🥈','🥉'][i] : '👤'} ${e.name}</span>
-            <span>${e.score} pts</span>
-          </div></li>`).join('') || "<li>Aucun score</li>";
-      } catch(e) { $("leaderboard").innerHTML = "<li>Erreur</li>"; }
-    }
-
     $("btnStart").onclick = () => {
-      playerName = $("nameInput").value || "Anonyme";
       $("screen-start").classList.add("hidden");
       $("screen-quiz").classList.remove("hidden");
-      renderQuestion();
+      render();
     };
 
     $("btnRight").onclick = () => {
-      history.push({b: blockIndex, l: levelIndex, s: score});
-      score += BLOCKS[blockIndex].items[levelIndex].points;
-      if(levelIndex < 3) levelIndex++; else { blockIndex++; levelIndex = 0; }
-      if(blockIndex >= BLOCKS.length) finishQuiz(); else renderQuestion();
+      save();
+      score += BLOCKS[bIdx].items[lIdx].pts;
+      if (lIdx < BLOCKS[bIdx].items.length - 1) lIdx++; 
+      else { bIdx++; lIdx = 0; }
+      checkEnd();
     };
 
     $("btnWrong").onclick = () => {
-      history.push({b: blockIndex, l: levelIndex, s: score});
-      blockIndex++; levelIndex = 0;
-      if(blockIndex >= BLOCKS.length) finishQuiz(); else renderQuestion();
+      save();
+      bIdx++; lIdx = 0;
+      checkEnd();
     };
 
     $("btnUndo").onclick = () => {
       const last = history.pop();
-      if(last) { blockIndex = last.b; levelIndex = last.l; score = last.s; renderQuestion(); }
+      if (last) { bIdx = last.b; lIdx = last.l; score = last.s; render(); }
     };
 
-    function renderQuestion() {
-      const block = BLOCKS[blockIndex];
-      const item = block.items[levelIndex];
+    function save() { history.push({b: bIdx, l: lIdx, s: score}); }
+
+    function checkEnd() {
+      if (bIdx >= BLOCKS.length) {
+        $("screen-quiz").classList.add("hidden");
+        $("screen-end").classList.remove("hidden");
+        $("finalScore").textContent = score;
+        $("scoreMessage").textContent = score > 100 ? "EXCELLENT ! 🧠" : "PAS MAL ! 👍";
+      } else render();
+    }
+
+    function render() {
+      const item = BLOCKS[bIdx].items[lIdx];
       $("questionText").textContent = item.text;
-      $("questionPoints").textContent = `+ ${item.points} points`;
-      $("kicker").textContent = `${block.name} • Question ${item.label}`;
-      $("progress").textContent = `Thème ${blockIndex + 1}/${BLOCKS.length}`;
+      $("answerText").textContent = "Réponse : " + item.ans;
+      $("answerText").classList.remove("hidden");
+      $("questionPoints").textContent = `+ ${item.pts} pts`;
+      $("kicker").textContent = BLOCKS[bIdx].name;
+      $("progress").textContent = `Bloc ${bIdx + 1}/${BLOCKS.length}`;
       $("score").textContent = `Score: ${score}`;
     }
   </script>
