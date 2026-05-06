@@ -221,7 +221,7 @@ const BLOCKS = [
       $("screen-quiz").classList.add("hidden");
       $("screen-end").classList.remove("hidden");
       $("finalScore").textContent = score;
-      $("scoreMessage").textContent = score > 85 ? "LÉGENDE 🏆" : score > 50 ? "BIEN JOUÉ 👍" : "NABILLA TIER 📞";
+      $("scoreMessage").textContent = score > 150 ? "LÉGENDE 🏆" : score > 100 ? "BIEN JOUÉ 👍" : "NABILLA TIER 📞" : score > 50 ? "PEUT MIEUX FAIRE 🏆" : score > 0 ? "NABILLA TIER 📞";
       try {
         await fetch(`${GOOGLE_SCRIPT_URL}?name=${encodeURIComponent(playerName)}&score=${score}`, { mode: 'no-cors' });
       } catch(e) {}
